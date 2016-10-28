@@ -6,33 +6,33 @@ The NUC505 series is also equipped with plenty of peripheral devices, such as US
 
 ![](http://www.nuvoton.com/export/sites/nuvoton/images/Microcontrollers/NUC505YO13Y.png_1224593398.png)
 
-## Setup
+![](Docs/nuc505_block.png)
 
-### Hardware
+## Hardware
 
 - NuTiny-SDK-NUC505Y User Manual: http://www.nuvoton.com/opencms/resource-download.jsp?tp_GUID=UG0120150209183644
 - NuTiny-SDK-NUC505Y Schematics: http://www.nuvoton.com/opencms/resource-download.jsp?tp_GUID=HL0120150213163240
 
-### Software
+## Software
 
 -  NUC505 Series BSP: http://www.nuvoton.com/opencms/resource-download.jsp?tp_GUID=SW0120141215140101
 -  NUC505 Series BSP Readme: http://www.nuvoton.com/opencms/resource-download.jsp?tp_GUID=RM0120151222141552
 
-### Development Software
+## Development
+
+### Tools
 
 - Keil MDK-ARM or IAR Embedded Workbench
+
+### Example Code
+
+- NUC505 Series Examples: http://www.nuvoton.com/opencms/products/microcontrollers/arm-cortex-m4-mcus/nuc505-series/Example-Code/?__locale=en&resourcePage=Y
 
 ### Programming
 
 - ICP Programming Tool: http://www.nuvoton.com/opencms/resource-download.jsp?tp_GUID=SW0520101208200310
 - NUC505 ICP Programming Tool User Guide: http://www.nuvoton.com/hq/resource-download.jsp?tp_GUID=DA01-NUC505
 - Nu-Link Command Tool: http://www.nuvoton.com/opencms/resource-download.jsp?tp_GUID=SW0520160317094731
-
-## Development
-
-### Example Code
-
-- NUC505 Series Examples: http://www.nuvoton.com/opencms/products/microcontrollers/arm-cortex-m4-mcus/nuc505-series/Example-Code/?__locale=en&resourcePage=Y
 
 ## Reference
 
