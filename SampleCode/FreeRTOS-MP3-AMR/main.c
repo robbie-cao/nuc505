@@ -56,19 +56,19 @@
     ***************************************************************************
 
 
-    http://www.FreeRTOS.org - Documentation, books, training, latest versions, 
+    http://www.FreeRTOS.org - Documentation, books, training, latest versions,
     license and Real Time Engineers Ltd. contact details.
 
     http://www.FreeRTOS.org/plus - A selection of FreeRTOS ecosystem products,
     including FreeRTOS+Trace - an indispensable productivity tool, and our new
     fully thread aware and reentrant UDP/IP stack.
 
-    http://www.OpenRTOS.com - Real Time Engineers ltd license FreeRTOS to High 
-    Integrity Systems, who sell the code with commercial support, 
+    http://www.OpenRTOS.com - Real Time Engineers ltd license FreeRTOS to High
+    Integrity Systems, who sell the code with commercial support,
     indemnification and middleware, under the OpenRTOS brand.
-    
-    http://www.SafeRTOS.com - High Integrity Systems also provide a safety 
-    engineered and independently SIL3 certified version for use in safety and 
+
+    http://www.SafeRTOS.com - High Integrity Systems also provide a safety
+    engineered and independently SIL3 certified version for use in safety and
     mission critical applications that require provable dependability.
 */
 
@@ -255,17 +255,17 @@ int main(void)
         extern uint32_t __Vectors[];
         extern uint32_t __Vectors_Size[];
         extern uint32_t Image$$ER_VECTOR2$$ZI$$Base[];
-    
+
 			printf("Relocate vector table in SRAM (0x%08X) for fast interrupt handling. count:%d\n", Image$$ER_VECTOR2$$ZI$$Base,(unsigned int) __Vectors_Size);
         memcpy((void *) Image$$ER_VECTOR2$$ZI$$Base, (void *) __Vectors, (unsigned int) __Vectors_Size);
         SCB->VTOR = (uint32_t) Image$$ER_VECTOR2$$ZI$$Base;
     }
-		
+
 #ifdef CHECK_TEST
-    xTaskCreate( vCheckTask, ( signed portCHAR * ) "Check", mainCHECK_TASK_STACK_SIZE, NULL, mainCHECK_TASK_PRIORITY, NULL );	
+    xTaskCreate( vCheckTask, ( signed portCHAR * ) "Check", mainCHECK_TASK_STACK_SIZE, NULL, mainCHECK_TASK_PRIORITY, NULL );
 #endif
 
-	
+
 	/* Start standard demo/test application flash tasks.  See the comments at
 	the top of this file.  The LED flash tasks are always created.  The other
 	tasks are only created if mainCREATE_SIMPLE_LED_FLASHER_DEMO_ONLY is set to
@@ -274,24 +274,24 @@ int main(void)
 
 //	vStartLEDFlashTasks( mainFLASH_TASK_PRIORITY );
 	vStartAPPTasks( mainAPP_TASK_PRIORITY );
-	
+
 	vStartPolledQueueTasks( mainQUEUE_POLL_PRIORITY );
-	
+
 	/* The following function will only create more tasks and timers if
 	mainCREATE_SIMPLE_LED_FLASHER_DEMO_ONLY is set to 0 (at the top of this
 	file).  See the comments at the top of this file for more information. */
 	//prvOptionallyCreateComprehensveTestApplication();
-	
+
 	printf("FreeRTOS is starting ...\n");
 	/* Start the scheduler. */
 	vTaskStartScheduler();
-	
+
 	/* If all is well, the scheduler will now be running, and the following line
 	will never be reached.  If the following line does execute, then there was
 	insufficient FreeRTOS heap memory available for the idle and/or timer tasks
 	to be created.  See the memory management section on the FreeRTOS web site
 	for more details. */
-	for( ;; );	
+	for( ;; );
 }
 /*-----------------------------------------------------------*/
 
@@ -306,7 +306,7 @@ void I2S_Init(void)
 //	CLK_SET_APLL(CLK_APLL_45158425);	// APLL is 45158425Hz for 44100Hz
 	CLK_SetModuleClock(I2S_MODULE, CLK_I2S_SRC_APLL, 0);	// 1 means (APLL/2)
     /* Reset IP */
-    SYS_ResetModule(I2S_RST);    
+    SYS_ResetModule(I2S_RST);
     /*---------------------------------------------------------------------------------------------------------*/
     /* Init I/O Multi-function                                                                                 */
     /*---------------------------------------------------------------------------------------------------------*/
@@ -316,12 +316,12 @@ void I2S_Init(void)
 		// GPC[10] = DOUT
 		// GPC[11] = LRCLK
 		// GPC[12] = BCLK
-		SYS->GPC_MFPH  = (SYS->GPC_MFPH & (~SYS_GPC_MFPH_PC8MFP_Msk) ) | SYS_GPC_MFPH_PC8MFP_I2S_MCLK;	
-		SYS->GPC_MFPH  = (SYS->GPC_MFPH & (~SYS_GPC_MFPH_PC9MFP_Msk) ) | SYS_GPC_MFPH_PC9MFP_I2S_DIN;	
-		SYS->GPC_MFPH  = (SYS->GPC_MFPH & (~SYS_GPC_MFPH_PC10MFP_Msk) ) | SYS_GPC_MFPH_PC10MFP_I2S_DOUT;	
-		SYS->GPC_MFPH  = (SYS->GPC_MFPH & (~SYS_GPC_MFPH_PC11MFP_Msk) ) | SYS_GPC_MFPH_PC11MFP_I2S_LRCLK;	
-		SYS->GPC_MFPH  = (SYS->GPC_MFPH & (~SYS_GPC_MFPH_PC12MFP_Msk) ) | SYS_GPC_MFPH_PC12MFP_I2S_BCLK;	
-	
+		SYS->GPC_MFPH  = (SYS->GPC_MFPH & (~SYS_GPC_MFPH_PC8MFP_Msk) ) | SYS_GPC_MFPH_PC8MFP_I2S_MCLK;
+		SYS->GPC_MFPH  = (SYS->GPC_MFPH & (~SYS_GPC_MFPH_PC9MFP_Msk) ) | SYS_GPC_MFPH_PC9MFP_I2S_DIN;
+		SYS->GPC_MFPH  = (SYS->GPC_MFPH & (~SYS_GPC_MFPH_PC10MFP_Msk) ) | SYS_GPC_MFPH_PC10MFP_I2S_DOUT;
+		SYS->GPC_MFPH  = (SYS->GPC_MFPH & (~SYS_GPC_MFPH_PC11MFP_Msk) ) | SYS_GPC_MFPH_PC11MFP_I2S_LRCLK;
+		SYS->GPC_MFPH  = (SYS->GPC_MFPH & (~SYS_GPC_MFPH_PC12MFP_Msk) ) | SYS_GPC_MFPH_PC12MFP_I2S_BCLK;
+
 }
 
 unsigned long get_fattime (void)
@@ -338,14 +338,14 @@ static void prvSetupHardware( void )
 
 	    /* Enable  XTAL */
     CLK->PWRCTL |= CLK_PWRCTL_HXTEN_Msk;
-	
+
 		CLK_SetCoreClock(96000000);
     /* Update System Core Clock */
     SystemCoreClockUpdate();
-	
+
 		// Set APB clock as 1/2 HCLK
 		CLK_SetModuleClock(PCLK_MODULE, NULL, 1);
-	
+
     /* Enable IP clock */
     CLK_EnableModuleClock(UART0_MODULE);
     CLK_EnableModuleClock(TMR0_MODULE);
@@ -360,24 +360,25 @@ static void prvSetupHardware( void )
     /*---------------------------------------------------------------------------------------------------------*/
     /* Init I/O Multi-function                                                                                 */
     /*---------------------------------------------------------------------------------------------------------*/
-    /* Configure multi-function pins for UART0 RXD and TXD */		
+    /* Configure multi-function pins for UART0 RXD and TXD */
     SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB0MFP_Msk) ) | SYS_GPB_MFPL_PB0MFP_UART0_TXD;
-    SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB1MFP_Msk) ) | SYS_GPB_MFPL_PB1MFP_UART0_RXD;		
+    SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB1MFP_Msk) ) | SYS_GPB_MFPL_PB1MFP_UART0_RXD;
 
 	    /* Reset UART module */
     SYS_ResetModule(UART0_RST);
 	/* Init UART to 115200-8n1 for print message */
     UART_Open(UART0, 115200);
-		
+
 		//SD0_Init defined SDH_GPIO_GC
     // The group C are GPC0~2, GPC4~7
     SYS->GPC_MFPL &= (~0x77770777);
     SYS->GPC_MFPL |=   0x11110111;
-		
+
 		printf("rc=%d\n", (WORD)disk_initialize(0));
 		disk_read(0, Buff, 2, 1);
-    f_mount(0, &FatFs[0]);
-		
+    //f_mount(0, &FatFs[0]);  // for FATFS v0.09
+    f_mount(&FatFs[0], "", 0);  // for FATFS v0.11
+
 		/* Init I2S, IP clock and multi-function I/O */
 		I2S_Init();
 }
@@ -447,11 +448,11 @@ void vApplicationTickHook( void )
 static void vCheckTask( void *pvParameters )
 {
 	portTickType xLastExecutionTime;
-	
+
 	xLastExecutionTime = xTaskGetTickCount();
-	
+
 	printf("Check Task is running by message\n");
-	
+
     for( ;; )
 	{
 		/* Perform this check every mainCHECK_DELAY milliseconds. */
