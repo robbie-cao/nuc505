@@ -1,0 +1,21 @@
+; Copyright (c) Nuvoton Technology Corp. All rights reserved.
+
+ROM      0x00000000  0x00200000  ; 2MB (SPI FLash)
+{
+	LOAD_ROM +0
+    {
+        startup_nuc505Series.o(RESET, +First)
+        startup_NUC505Series.o
+        system_NUC505Series.o
+        anon$$obj.o
+        handlers.o
+        entry*.o
+        init.o
+	}
+    
+    EXEC_RAM 0x1FF00000
+	{
+		*(+RO)
+        *(+RW, +ZI)
+	}
+}
