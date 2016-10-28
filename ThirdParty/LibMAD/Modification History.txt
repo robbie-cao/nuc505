@@ -1,0 +1,16 @@
+2014/4/30
+
+Files:
+==============
+synth.h
+==============
+1) modify samples from 32bit to 16bit
+ mad_fixed_t samples[2][1152];
+ ||
+ V
+ short samples[2][1152];
+ 
+==============
+synth.c
+==============
+1) modify synth_full() from 32bit to 16bit

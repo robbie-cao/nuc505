@@ -1,0 +1,9 @@
+SCC = This is a Source Code Control file
+
+[HIDTransferTest.sln]
+SCC_Aux_Path = "\\NTHCRDVSS01\vss\A0PT_Prj_Share"
+SCC_Project_Name = "$/NUC505/FTP/BSP/SampleCode/StdDriver/USBD_HID_Transfer/WindowsTool/WindowsToolSourceCode", AKEFAAAA
+
+[HIDTransferTest.vcproj]
+SCC_Aux_Path = "\\NTHCRDVSS01\vss\A0PT_Prj_Share"
+SCC_Project_Name = "$/NUC505/FTP/BSP/SampleCode/StdDriver/USBD_HID_Transfer/WindowsTool/WindowsToolSourceCode", AKEFAAAA
