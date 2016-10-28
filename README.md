@@ -10,14 +10,21 @@ The NUC505 series is also equipped with plenty of peripheral devices, such as US
 
 ## Hardware
 
+### Board
+
 ![](Docs/nuc505_nutiny_board.png)
 
 - NuTiny-SDK-NUC505Y User Manual: http://www.nuvoton.com/opencms/resource-download.jsp?tp_GUID=UG0120150209183644
 - NuTiny-SDK-NUC505Y Schematics: http://www.nuvoton.com/opencms/resource-download.jsp?tp_GUID=HL0120150213163240
 
-**Boot Select (SW1) Settings**
+### Boot Select (SW1) Settings
 
 ![](Docs/nuc505_boot_select.png)
+
+Typical case:
+
+- Debug in Keil MDK-ARM (UV4): Set SW1-4 to **1110**
+- Programming into Internal SPI Flash with ICP: Set SW1-4 to **1101** before programing and then **1111** after programming done
 
 ## Software
 
