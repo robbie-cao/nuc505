@@ -36,6 +36,12 @@ The NUC505 series is also equipped with plenty of peripheral devices, such as US
 
 ## Boot
 
+### Power-On Setting
+
+![](Docs/nuc505_poweron_setting.png)
+
+### Memory Model
+
 With space and speed taken into consideration, user may apply memory models introduced here to place critical code/data on SRAM for better performance:
 
 - Typical
@@ -65,6 +71,10 @@ The **Overlay** memory model divides a large program into multiple pieces of cod
 ![](Docs/nuc505_memory_model_4.png)
 
 > http://www.nuvoton.com/hq/resource-download.jsp?tp_GUID=DA01-NUC505-1
+
+### Example
+
+Template: https://github.com/robbie-cao/nuc505/tree/master/SampleCode/BootTemplate
 
 ## Security
 
