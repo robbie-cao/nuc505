@@ -15,6 +15,10 @@ The NUC505 series is also equipped with plenty of peripheral devices, such as US
 - NuTiny-SDK-NUC505Y User Manual: http://www.nuvoton.com/opencms/resource-download.jsp?tp_GUID=UG0120150209183644
 - NuTiny-SDK-NUC505Y Schematics: http://www.nuvoton.com/opencms/resource-download.jsp?tp_GUID=HL0120150213163240
 
+**Boot Select (SW1) Settings**
+
+![](Docs/nuc505_boot_select.png)
+
 ## Software
 
 ### BSP
