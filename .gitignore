@@ -27,7 +27,75 @@
 *.i*86
 *.x86_64
 *.hex
+*.sim
+*.bin
 
 # Debug files
 *.dSYM/
 *.su
+
+# Build folders
+Debug
+Release
+Exe
+exe
+List
+lst
+Obj
+obj
+
+# Tag files
+cscope.*
+tags
+taghl_config.txt
+.tags*
+*.taghl
+*.IAB
+*.IAD
+*.IMB
+*.IMD
+*.PFI
+*.PO
+*.PR
+*.PRI
+*.PS
+
+# Zip files
+*.bz2
+*.xz
+*.gz
+*.tar
+*.zip
+*.rar
+*.7z
+
+# Backup folder/files
+Backup
+backup
+TMP
+tmp
+*.bak
+
+# Doc folder/files
+docbook
+latex
+html
+rtf
+build_info
+*.pdf
+
+# Misc
+*.log
+
+# IAR files
+settings
+*.ewt
+
+
+# Keil MDK files
+*.crf
+*.dep
+*.d
+*.i
+*.lst
+*.map
