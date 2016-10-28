@@ -34,6 +34,42 @@ The NUC505 series is also equipped with plenty of peripheral devices, such as US
 - NUC505 ICP Programming Tool User Guide: http://www.nuvoton.com/hq/resource-download.jsp?tp_GUID=DA01-NUC505
 - Nu-Link Command Tool: http://www.nuvoton.com/opencms/resource-download.jsp?tp_GUID=SW0520160317094731
 
+## Boot
+
+With space and speed taken into consideration, user may apply memory models introduced here to place critical code/data on SRAM for better performance:
+
+- Typical
+- Critical on SRAM
+- main() on SRAM
+- Full on SRAM
+- Overlay.
+
+The **Typical** memory model arranges read-only code/data on SPI Flash and the remaining on SRAM, with read/write data differently handled.
+
+![](Docs/nuc505_memory_model_0.png)
+
+Based on the **Typical** memory model, the **Critical on SRAM** memory model moves critical code/data from SPI Flash to SRAM for better performance.
+
+![](Docs/nuc505_memory_model_1.png)
+
+The **main() on SRAM** memory model makes the idea further by moving all code/data to SRAM except unmovable part.
+
+![](Docs/nuc505_memory_model_2.png)
+
+Same as the **main() on SRAM** memory model, the **Full on SRAM** memory model moves all code/data to SRAM with another approach.
+
+![](Docs/nuc505_memory_model_3.png)
+
+The **Overlay** memory model divides a large program into multiple pieces of code/data which are loaded into SRAM when required.
+
+![](Docs/nuc505_memory_model_4.png)
+
+> http://www.nuvoton.com/hq/resource-download.jsp?tp_GUID=DA01-NUC505-1
+
+## Security
+
+- http://www.nuvoton.com/hq/resource-download.jsp?tp_GUID=DA01-AN0001
+
 ## Reference
 
 - NUC505 Series Overview: http://www.nuvoton.com/hq/products/microcontrollers/arm-cortex-m4-mcus/nuc505-series/?__locale=zh
