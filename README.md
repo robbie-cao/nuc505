@@ -10,6 +10,8 @@ The NUC505 series is also equipped with plenty of peripheral devices, such as US
 
 ## Hardware
 
+![](Docs/nuc505_nutiny_board.png)
+
 - NuTiny-SDK-NUC505Y User Manual: http://www.nuvoton.com/opencms/resource-download.jsp?tp_GUID=UG0120150209183644
 - NuTiny-SDK-NUC505Y Schematics: http://www.nuvoton.com/opencms/resource-download.jsp?tp_GUID=HL0120150213163240
 
