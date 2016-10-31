@@ -7,7 +7,7 @@
 
   <Targets>
     <Target>
-      <TargetName>player</TargetName>
+      <TargetName>mp3</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
       <TargetOption>
@@ -43,10 +43,10 @@
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
           <OutputDirectory>.\obj\</OutputDirectory>
-          <OutputName>player</OutputName>
+          <OutputName>mp3</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
-          <CreateHexFile>0</CreateHexFile>
+          <CreateHexFile>1</CreateHexFile>
           <DebugInformation>1</DebugInformation>
           <BrowseInformation>1</BrowseInformation>
           <ListingPath>.\lst\</ListingPath>
@@ -206,8 +206,8 @@
             <RvdsVP>2</RvdsVP>
             <hadIRAM2>0</hadIRAM2>
             <hadIROM2>0</hadIROM2>
-            <StupSel>1</StupSel>
-            <useUlib>1</useUlib>
+            <StupSel>0</StupSel>
+            <useUlib>0</useUlib>
             <EndSel>0</EndSel>
             <uLtcg>0</uLtcg>
             <RoSelD>0</RoSelD>
@@ -219,7 +219,7 @@
             <NoZi3>0</NoZi3>
             <NoZi4>0</NoZi4>
             <NoZi5>0</NoZi5>
-            <Ro1Chk>1</Ro1Chk>
+            <Ro1Chk>0</Ro1Chk>
             <Ro2Chk>0</Ro2Chk>
             <Ro3Chk>0</Ro3Chk>
             <Ir1Chk>0</Ir1Chk>
@@ -343,9 +343,9 @@
             <uThumb>0</uThumb>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define></Define>
+              <Define>__WINS__ OPT_SPEED</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\Library\CMSIS\Include;..\..\..\Library\Device\Nuvoton\NUC505Series\Include;..\..\..\Library\StdDriver\inc;..\..\..\Library\UsbHostLib\INCLUDE;..\..\..\Library\UsbHostLib\INCLUDE\inc_mass;..\..\..\ThirdParty\FATFS\src</IncludePath>
+              <IncludePath>..\..\..\Library\CMSIS\Include;..\..\..\Library\Device\Nuvoton\NUC505Series\Include;..\..\..\ThirdParty\libmad\inc;..\..\..\Library\StdDriver\inc;..\..\..\ThirdParty\FATFS\src</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -393,7 +393,7 @@
             <File>
               <FileName>startup_NUC505Series.s</FileName>
               <FileType>2</FileType>
-              <FilePath>..\..\..\Library\Device\Nuvoton\NUC505Series\Source\ARM\startup_NUC505Series.s</FilePath>
+              <FilePath>..\startup_NUC505Series.s</FilePath>
             </File>
           </Files>
         </Group>
@@ -411,9 +411,19 @@
               <FilePath>..\diskio.c</FilePath>
             </File>
             <File>
-              <FileName>wavplayer.c</FileName>
+              <FileName>SDGlue.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\wavplayer.c</FilePath>
+              <FilePath>..\SDGlue.c</FilePath>
+            </File>
+            <File>
+              <FileName>mp3.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\mp3.c</FilePath>
+            </File>
+            <File>
+              <FileName>MP3HeaderParser.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\MP3HeaderParser.c</FilePath>
             </File>
             <File>
               <FileName>nuc505_isr.c</FileName>
@@ -421,9 +431,9 @@
               <FilePath>..\nuc505_isr.c</FilePath>
             </File>
             <File>
-              <FileName>SDGlue.c</FileName>
+              <FileName>InternalCODEC.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\SDGlue.c</FilePath>
+              <FilePath>..\InternalCODEC.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -469,6 +479,71 @@
               <FileName>ff.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\ThirdParty\FATFS\src\ff.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>MP3Lib</GroupName>
+          <Files>
+            <File>
+              <FileName>version.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\ThirdParty\libmad\src\version.c</FilePath>
+            </File>
+            <File>
+              <FileName>bit.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\ThirdParty\libmad\src\bit.c</FilePath>
+            </File>
+            <File>
+              <FileName>decoder.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\ThirdParty\libmad\src\decoder.c</FilePath>
+            </File>
+            <File>
+              <FileName>fixed.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\ThirdParty\libmad\src\fixed.c</FilePath>
+            </File>
+            <File>
+              <FileName>frame.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\ThirdParty\libmad\src\frame.c</FilePath>
+            </File>
+            <File>
+              <FileName>huffman.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\ThirdParty\libmad\src\huffman.c</FilePath>
+            </File>
+            <File>
+              <FileName>layer3.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\ThirdParty\libmad\src\layer3.c</FilePath>
+            </File>
+            <File>
+              <FileName>layer12.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\ThirdParty\libmad\src\layer12.c</FilePath>
+            </File>
+            <File>
+              <FileName>MP3Func.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\ThirdParty\libmad\src\MP3Func.c</FilePath>
+            </File>
+            <File>
+              <FileName>stream.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\ThirdParty\libmad\src\stream.c</FilePath>
+            </File>
+            <File>
+              <FileName>synth.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\ThirdParty\libmad\src\synth.c</FilePath>
+            </File>
+            <File>
+              <FileName>timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\ThirdParty\libmad\src\timer.c</FilePath>
             </File>
           </Files>
         </Group>

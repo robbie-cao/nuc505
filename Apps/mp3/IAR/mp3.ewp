@@ -294,11 +294,11 @@
         </option>
         <option>
           <name>CCIncludePath2</name>
-          <state>$PROJ_DIR$\..\..\..\..\Library\CMSIS\Include</state>
-          <state>$PROJ_DIR$\..\..\..\..\Library\Device\Nuvoton\NUC505Series\Include</state>
-          <state>$PROJ_DIR$\..\..\..\..\Library\StdDriver\inc</state>
-          <state>$PROJ_DIR$\..\..\..\..\ThirdParty\FATFS\src</state>
-          <state>$PROJ_DIR$\..\..\..\..\ThirdParty\LibMAD\inc</state>
+          <state>$PROJ_DIR$\..\..\..\Library\CMSIS\Include</state>
+          <state>$PROJ_DIR$\..\..\..\Library\Device\Nuvoton\NUC505Series\Include</state>
+          <state>$PROJ_DIR$\..\..\..\Library\StdDriver\inc</state>
+          <state>$PROJ_DIR$\..\..\..\ThirdParty\FATFS\src</state>
+          <state>$PROJ_DIR$\..\..\..\ThirdParty\LibMAD\inc</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
@@ -573,7 +573,7 @@
         </option>
         <option>
           <name>OOCOutputFile</name>
-          <state>I2S_MP3PLAYER_SD.bin</state>
+          <state>mp3.bin</state>
         </option>
         <option>
           <name>OOCCommandLineProducer</name>
@@ -627,7 +627,7 @@
         </option>
         <option>
           <name>IlinkOutputFile</name>
-          <state>I2S_MP3PLAYER_SD.out</state>
+          <state>mp3.out</state>
         </option>
         <option>
           <name>IlinkDebugInfoEnable</name>
@@ -904,76 +904,76 @@
   <group>
     <name>CMSIS</name>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\Library\Device\Nuvoton\NUC505Series\Source\IAR\startup_NUC505Series.s</name>
+      <name>$PROJ_DIR$\..\..\..\Library\Device\Nuvoton\NUC505Series\Source\IAR\startup_NUC505Series.s</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\Library\Device\Nuvoton\NUC505Series\Source\system_NUC505Series.c</name>
+      <name>$PROJ_DIR$\..\..\..\Library\Device\Nuvoton\NUC505Series\Source\system_NUC505Series.c</name>
     </file>
   </group>
   <group>
     <name>FATFS</name>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\ThirdParty\FATFS\src\ff.c</name>
+      <name>$PROJ_DIR$\..\..\..\ThirdParty\FATFS\src\ff.c</name>
     </file>
   </group>
   <group>
     <name>Library</name>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\Library\StdDriver\src\clk.c</name>
+      <name>$PROJ_DIR$\..\..\..\Library\StdDriver\src\clk.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\Library\StdDriver\src\i2s.c</name>
+      <name>$PROJ_DIR$\..\..\..\Library\StdDriver\src\i2s.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\Library\StdDriver\src\retarget.c</name>
+      <name>$PROJ_DIR$\..\..\..\Library\StdDriver\src\retarget.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\Library\StdDriver\src\sd.c</name>
+      <name>$PROJ_DIR$\..\..\..\Library\StdDriver\src\sd.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\Library\StdDriver\src\sys.c</name>
+      <name>$PROJ_DIR$\..\..\..\Library\StdDriver\src\sys.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\Library\StdDriver\src\uart.c</name>
+      <name>$PROJ_DIR$\..\..\..\Library\StdDriver\src\uart.c</name>
     </file>
   </group>
   <group>
     <name>MP3</name>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\ThirdParty\LibMAD\src\bit.c</name>
+      <name>$PROJ_DIR$\..\..\..\ThirdParty\LibMAD\src\bit.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\ThirdParty\LibMAD\src\decoder.c</name>
+      <name>$PROJ_DIR$\..\..\..\ThirdParty\LibMAD\src\decoder.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\ThirdParty\LibMAD\src\fixed.c</name>
+      <name>$PROJ_DIR$\..\..\..\ThirdParty\LibMAD\src\fixed.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\ThirdParty\LibMAD\src\frame.c</name>
+      <name>$PROJ_DIR$\..\..\..\ThirdParty\LibMAD\src\frame.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\ThirdParty\LibMAD\src\huffman.c</name>
+      <name>$PROJ_DIR$\..\..\..\ThirdParty\LibMAD\src\huffman.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\ThirdParty\LibMAD\src\layer12.c</name>
+      <name>$PROJ_DIR$\..\..\..\ThirdParty\LibMAD\src\layer12.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\ThirdParty\LibMAD\src\layer3.c</name>
+      <name>$PROJ_DIR$\..\..\..\ThirdParty\LibMAD\src\layer3.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\ThirdParty\LibMAD\src\MP3Func.c</name>
+      <name>$PROJ_DIR$\..\..\..\ThirdParty\LibMAD\src\MP3Func.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\ThirdParty\LibMAD\src\stream.c</name>
+      <name>$PROJ_DIR$\..\..\..\ThirdParty\LibMAD\src\stream.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\ThirdParty\LibMAD\src\synth.c</name>
+      <name>$PROJ_DIR$\..\..\..\ThirdParty\LibMAD\src\synth.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\ThirdParty\LibMAD\src\timer.c</name>
+      <name>$PROJ_DIR$\..\..\..\ThirdParty\LibMAD\src\timer.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\ThirdParty\LibMAD\src\version.c</name>
+      <name>$PROJ_DIR$\..\..\..\ThirdParty\LibMAD\src\version.c</name>
     </file>
   </group>
   <group>

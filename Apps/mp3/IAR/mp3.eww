@@ -2,7 +2,7 @@
 
 <workspace>
   <project>
-    <path>$WS_DIR$\I2S_MP3PLAYER_SD.ewp</path>
+    <path>$WS_DIR$\mp3.ewp</path>
   </project>
   <batchBuild/>
 </workspace>

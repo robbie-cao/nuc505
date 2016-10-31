@@ -6,17 +6,17 @@ LR_ROM      0x00000000  0x00200000  ; 2MB (SPI FLash)
     {
         startup_nuc505Series.o(RESET, +First)
 	}
-    
+
     ;ER_MTPSIG 0x00000100 FIXED  ; MTP signature is fixed at 0x0000_0100.
     ;{
     ;    main.o(mtpsig)
     ;}
-    
+
     ER_RO +0
 	{
 		*(+RO)
 	}
-    
+
     ;ER_SPIMCODE     0x1FF00000  0x00011000
 	ER_SPIMCODE     0x1FF00000  0x00020000
     {
@@ -36,7 +36,7 @@ LR_ROM      0x00000000  0x00200000  ; 2MB (SPI FLash)
 		mp3.o(+RO)
     ;    *(spimcode)
 	}
-    
+
     ER_RW           +0
 	{
 		*(+RW, +ZI)
@@ -44,7 +44,7 @@ LR_ROM      0x00000000  0x00200000  ; 2MB (SPI FLash)
 }
 
 ;LR_RAM      0x1FF11000  0x0000F000
-;{	
+;{
 ;	ER_ZI +0
 ;	{
 ;		*(+ZI)
