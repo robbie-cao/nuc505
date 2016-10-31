@@ -69,15 +69,18 @@ void vStartAPPTasks( unsigned portBASE_TYPE uxPriority )
 {
     /* Spawn the task. */
     xTaskCreate( vSWITCHTask, ( signed char * ) "SWITCH", ( unsigned short ) 120, NULL, uxPriority, &SWITCH );
-    xTaskCreate( vAMRTask, ( signed char * ) "AMR", ( unsigned short ) 2000, NULL, uxPriority, &AMR );
+#if 1
+    xTaskCreate( vAMRTask, ( signed char * ) "AMR", ( unsigned short ) 120, NULL, uxPriority, &AMR );
+#endif
 
     xTaskCreate( vMP3Task, ( signed char * ) "MP3", ( unsigned short ) 1000, NULL, uxPriority, &MP3 );
 
     vTaskSuspendAll();
     load_overlay(ovly_A);
-    //	load_overlay(ovly_B);
+    load_overlay(ovly_B);
     xTaskResumeAll();
-    vTaskSuspend(MP3);
+    //vTaskSuspend(MP3);
+    vTaskSuspend(SWITCH);
 }
 
 static portTASK_FUNCTION( vSWITCHTask, pvParameters )
@@ -85,7 +88,8 @@ static portTASK_FUNCTION( vSWITCHTask, pvParameters )
 
     /* The parameters are not used. */
     ( void ) pvParameters;
-    //	printf("T%s\n", (char *)pvParameters);
+    printf("%vSWITCHTask\n");
+    //printf("T%s\n", (char *)pvParameters);
 
     for(;;)
     {
@@ -272,6 +276,7 @@ static portTASK_FUNCTION( vAMRTask, pvParameters )
 
     /* The parameters are not used. */
     ( void ) pvParameters;
+    printf("%vAMRTask\n");
     //	printf("T%s\n", (char *)pvParameters);
 
     for(;;)
@@ -279,6 +284,7 @@ static portTASK_FUNCTION( vAMRTask, pvParameters )
 
         printf("APP1: AMR is running on SRAM.\n");
 
+#if 0
         I2S_Open(I2S, I2S_MODE_MASTER, 8000, I2S_DATABIT_16, I2S_MONO, I2S_FORMAT_I2S, I2S_ENABLE_INTERNAL_CODEC);
 
         // Open MCLK
@@ -301,6 +307,7 @@ static portTASK_FUNCTION( vAMRTask, pvParameters )
 
         /* Clean AMR codec */
         amrFinishEncode();
+#endif
 
         x++;
         y=1;
@@ -539,7 +546,8 @@ static portTASK_FUNCTION( vMP3Task, pvParameters )
 {
     /* The parameters are not used. */
     ( void ) pvParameters;
-    //	printf("T%s\n", (char *)pvParameters);
+    printf("%vMP3Task\n");
+    //printf("T%s\n", (char *)pvParameters);
 
     for(;;)
     {
@@ -548,6 +556,7 @@ static portTASK_FUNCTION( vMP3Task, pvParameters )
         uint32_t u32i;
         TCHAR * u8MP3FileName=MP3_FILE;
 
+        printf("APP2: MP3 is running on SRAM.\n");
         u32TxIdx = 0;
         i32TxDmaCur = 0;
         i32TxBufCur = 0;

@@ -455,6 +455,7 @@ static void vCheckTask( void *pvParameters )
 
     for( ;; )
     {
+        printf("Loop in vCheckTask\n");
         /* Perform this check every mainCHECK_DELAY milliseconds. */
         vTaskDelayUntil( &xLastExecutionTime, mainCHECK_DELAY );
         if( xArePollingQueuesStillRunning() != pdTRUE )
