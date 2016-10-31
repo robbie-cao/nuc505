@@ -7,7 +7,7 @@
  *
  * @note
  * Copyright (C) 2013 Nuvoton Technology Corp. All rights reserved.
-*****************************************************************************/
+ *****************************************************************************/
 #include <stdio.h>
 #include <string.h>
 #include "NUC505Series.h"
@@ -21,19 +21,19 @@ volatile uint8_t u8PCMBuffer_Playing=0;
 
 void I2S_IRQHandler(void)
 {
-		uint32_t u32I2SIntFlag;
+    uint32_t u32I2SIntFlag;
 
     u32I2SIntFlag = I2S_GET_INT_FLAG(I2S, (I2S_STATUS_TDMATIF_Msk | I2S_STATUS_TDMAEIF_Msk));
-		
-		if (u32I2SIntFlag & I2S_STATUS_TDMATIF_Msk)
-    {   
-			I2S_CLR_INT_FLAG(I2S, I2S_STATUS_TDMATIF_Msk);
-      aPCMBuffer_Full[0] = 0;
+
+    if (u32I2SIntFlag & I2S_STATUS_TDMATIF_Msk)
+    {
+        I2S_CLR_INT_FLAG(I2S, I2S_STATUS_TDMATIF_Msk);
+        aPCMBuffer_Full[0] = 0;
     }
     else if (u32I2SIntFlag & I2S_STATUS_TDMAEIF_Msk)
     {
-			I2S_CLR_INT_FLAG(I2S, I2S_STATUS_TDMAEIF_Msk);
-      aPCMBuffer_Full[1] = 0;
+        I2S_CLR_INT_FLAG(I2S, I2S_STATUS_TDMAEIF_Msk);
+        aPCMBuffer_Full[1] = 0;
     }
 }
 

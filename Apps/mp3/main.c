@@ -1,6 +1,6 @@
 /**************************************************************************//**
  * @file     main.c
- * @version  V2.1 
+ * @version  V2.1
  * $Revision: 8 $
  * $Date: 16/01/09 3:40p $
  * @brief    A MP3 file player demo using internal audio codec used to playback MP3 file stored in SD card.
@@ -97,73 +97,73 @@ void SD0_Init(void)
 void SYS_Init(void)
 {
 
-/*---------------------------------------------------------------------------------------------------------*/
-/* Init System Clock                                                                                       */
-/*---------------------------------------------------------------------------------------------------------*/
+    /*---------------------------------------------------------------------------------------------------------*/
+    /* Init System Clock                                                                                       */
+    /*---------------------------------------------------------------------------------------------------------*/
     /* Unlock protected registers */
     //SYS_UnlockReg();
-     
-    /* Enable  XTAL */
-//    CLK->PWRCTL |= CLK_PWRCTL_HXTEN_Msk;
 
-	CLK_SetCoreClock(100000000);
-    
-		/* PCLK divider */
-		CLK_SetModuleClock(PCLK_MODULE, NULL, 1);
-		
+    /* Enable  XTAL */
+    //    CLK->PWRCTL |= CLK_PWRCTL_HXTEN_Msk;
+
+    CLK_SetCoreClock(100000000);
+
+    /* PCLK divider */
+    CLK_SetModuleClock(PCLK_MODULE, NULL, 1);
+
     /* Lock protected registers */
     //SYS_LockReg();
 
-		//--- Initial SD0 multi-function pin
+    //--- Initial SD0 multi-function pin
     SD0_Init();
 }
 
 void UART0_Init(void)
 {
-		/* Enable UART0 Module clock */
+    /* Enable UART0 Module clock */
     CLK_EnableModuleClock(UART0_MODULE);
-		/* UART0 module clock from EXT */
-		CLK_SetModuleClock(UART0_MODULE, CLK_UART0_SRC_EXT, 0);
+    /* UART0 module clock from EXT */
+    CLK_SetModuleClock(UART0_MODULE, CLK_UART0_SRC_EXT, 0);
     /* Reset IP */
-    SYS_ResetModule(UART0_RST);    
+    SYS_ResetModule(UART0_RST);
     /* Configure UART0 and set UART0 Baud-rate */
-		UART_Open(UART0, 115200);
-		/*---------------------------------------------------------------------------------------------------------*/
+    UART_Open(UART0, 115200);
+    /*---------------------------------------------------------------------------------------------------------*/
     /* Init I/O Multi-function                                                                                 */
     /*---------------------------------------------------------------------------------------------------------*/
     /* Configure multi-function pins for UART0 RXD and TXD */
-		SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB0MFP_Msk) ) | SYS_GPB_MFPL_PB0MFP_UART0_TXD;	
-		SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB1MFP_Msk) ) | SYS_GPB_MFPL_PB1MFP_UART0_RXD;	
-	
+    SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB0MFP_Msk) ) | SYS_GPB_MFPL_PB0MFP_UART0_TXD;
+    SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB1MFP_Msk) ) | SYS_GPB_MFPL_PB1MFP_UART0_RXD;
+
 }
 
 void I2S_Init(void)
 {
-		/* Enable I2S Module clock */
+    /* Enable I2S Module clock */
     CLK_EnableModuleClock(I2S_MODULE);
-		/* I2S module clock from APLL */
-	//FIXME APLL CLOCK
-		// ideal clock is 49.152MHz, real clock is 49152031Hz
-//	CLK_SET_APLL(CLK_APLL_49152031);	// APLL is 49152031Hz for 48000Hz
-	CLK_SET_APLL(CLK_APLL_45158425);	// APLL is 45158425Hz for 44100Hz
-	CLK_SetModuleClock(I2S_MODULE, CLK_I2S_SRC_APLL, 0);	// 0 means (APLL/1)
+    /* I2S module clock from APLL */
+    //FIXME APLL CLOCK
+    // ideal clock is 49.152MHz, real clock is 49152031Hz
+    //	CLK_SET_APLL(CLK_APLL_49152031);	// APLL is 49152031Hz for 48000Hz
+    CLK_SET_APLL(CLK_APLL_45158425);	// APLL is 45158425Hz for 44100Hz
+    CLK_SetModuleClock(I2S_MODULE, CLK_I2S_SRC_APLL, 0);	// 0 means (APLL/1)
     /* Reset IP */
-    SYS_ResetModule(I2S_RST);    
+    SYS_ResetModule(I2S_RST);
     /*---------------------------------------------------------------------------------------------------------*/
     /* Init I/O Multi-function                                                                                 */
     /*---------------------------------------------------------------------------------------------------------*/
     /* Configure multi-function pins for I2S */
-		// GPC[8]  = MCLK
-		// GPC[9]  = DIN
-		// GPC[10] = DOUT
-		// GPC[11] = LRCLK
-		// GPC[12] = BCLK
-		SYS->GPC_MFPH  = (SYS->GPC_MFPH & (~SYS_GPC_MFPH_PC8MFP_Msk) ) | SYS_GPC_MFPH_PC8MFP_I2S_MCLK;	
-		SYS->GPC_MFPH  = (SYS->GPC_MFPH & (~SYS_GPC_MFPH_PC9MFP_Msk) ) | SYS_GPC_MFPH_PC9MFP_I2S_DIN;	
-		SYS->GPC_MFPH  = (SYS->GPC_MFPH & (~SYS_GPC_MFPH_PC10MFP_Msk) ) | SYS_GPC_MFPH_PC10MFP_I2S_DOUT;	
-		SYS->GPC_MFPH  = (SYS->GPC_MFPH & (~SYS_GPC_MFPH_PC11MFP_Msk) ) | SYS_GPC_MFPH_PC11MFP_I2S_LRCLK;	
-		SYS->GPC_MFPH  = (SYS->GPC_MFPH & (~SYS_GPC_MFPH_PC12MFP_Msk) ) | SYS_GPC_MFPH_PC12MFP_I2S_BCLK;	
-	
+    // GPC[8]  = MCLK
+    // GPC[9]  = DIN
+    // GPC[10] = DOUT
+    // GPC[11] = LRCLK
+    // GPC[12] = BCLK
+    SYS->GPC_MFPH  = (SYS->GPC_MFPH & (~SYS_GPC_MFPH_PC8MFP_Msk) ) | SYS_GPC_MFPH_PC8MFP_I2S_MCLK;
+    SYS->GPC_MFPH  = (SYS->GPC_MFPH & (~SYS_GPC_MFPH_PC9MFP_Msk) ) | SYS_GPC_MFPH_PC9MFP_I2S_DIN;
+    SYS->GPC_MFPH  = (SYS->GPC_MFPH & (~SYS_GPC_MFPH_PC10MFP_Msk) ) | SYS_GPC_MFPH_PC10MFP_I2S_DOUT;
+    SYS->GPC_MFPH  = (SYS->GPC_MFPH & (~SYS_GPC_MFPH_PC11MFP_Msk) ) | SYS_GPC_MFPH_PC11MFP_I2S_LRCLK;
+    SYS->GPC_MFPH  = (SYS->GPC_MFPH & (~SYS_GPC_MFPH_PC12MFP_Msk) ) | SYS_GPC_MFPH_PC12MFP_I2S_BCLK;
+
 }
 
 /*---------------------------------------------------------------------------------------------------------*/
@@ -185,11 +185,11 @@ int32_t main (void)
     printf("rc=%d\n", (WORD)disk_initialize(0));
     disk_read(0, Buff, 2, 1);
     //f_mount(0, &FatFs[0]);  // for FATFS v0.09
-		// Register work area to the default drive
+    // Register work area to the default drive
     f_mount(&FatFs[0], "", 0);  // for FATFS v0.11
 
-	/* Init I2S, IP clock and multi-function I/O */
-	I2S_Init();
+    /* Init I2S, IP clock and multi-function I/O */
+    I2S_Init();
 
     MP3Player();
 

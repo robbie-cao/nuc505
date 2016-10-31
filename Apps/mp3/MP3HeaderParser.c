@@ -30,11 +30,11 @@ void MP3_DECODE_HEADER(unsigned char *pBytes, struct mp3Header *hdr)
 int MP3_IS_VALID_HEADER(struct mp3Header *hdr)
 {
     return( (((hdr)->sync == 0x7FF)
-             && ((hdr)->bitrate != 0x0f)
-             && ((hdr)->version != 0x01)
-             && ((hdr)->layer != 0x00)
-             && ((hdr)->samfreq != 0x03)
-             && ((hdr)->emphasis != 0x02) ) ? 1:0);
+                && ((hdr)->bitrate != 0x0f)
+                && ((hdr)->version != 0x01)
+                && ((hdr)->layer != 0x00)
+                && ((hdr)->samfreq != 0x03)
+                && ((hdr)->emphasis != 0x02) ) ? 1:0);
 }
 
 int MP3_IS_V1L3_HEADER(struct mp3Header *hdr)
@@ -48,7 +48,7 @@ static int mp3GetFrameLength(mp3Header *pHdr)
     int pL1Rates[] =   {   0,  32,  64,  96, 128, 160, 192, 224, 256, 288, 320, 352, 384, 416, 448,  -1 };
     int pL2Rates[] =   {   0,  32,  48,  56,  64,  80,  96, 112, 128, 160, 192, 224, 256, 320, 384,  -1 };
     int pV1L3Rates[] = {   0,  32,  40,  48,  56,  64,  80,  96, 112, 128, 160, 192, 224, 256, 320,  -1 };
-	int pV2L1Rates[] = {   0,  32,  48,  56,  64,  80,  96, 112, 128, 144, 160, 176, 192, 224, 256,  -1 };
+    int pV2L1Rates[] = {   0,  32,  48,  56,  64,  80,  96, 112, 128, 144, 160, 176, 192, 224, 256,  -1 };
     int pV2L3Rates[] = {   0,   8,  16,  24,  32,  40,  48,  56,  64,  80,  96, 112, 128, 144, 160,  -1 };
 
     int pRate[4][4] = {
@@ -64,20 +64,20 @@ static int mp3GetFrameLength(mp3Header *pHdr)
     int base = 144;
 
     if (pHdr->layer == 0x01) {
-		if (pHdr->version == 0x03)
-			bitrate = pV1L3Rates[pHdr->bitrate];
-		else
-			bitrate = pV2L3Rates[pHdr->bitrate];
+        if (pHdr->version == 0x03)
+            bitrate = pV1L3Rates[pHdr->bitrate];
+        else
+            bitrate = pV2L3Rates[pHdr->bitrate];
     } else if (pHdr->layer == 0x02) {
         if (pHdr->version == 0x03)
-			bitrate = pL2Rates[pHdr->bitrate];
-		else
-			bitrate = pV2L3Rates[pHdr->bitrate];
+            bitrate = pL2Rates[pHdr->bitrate];
+        else
+            bitrate = pV2L3Rates[pHdr->bitrate];
     } else {
         if (pHdr->version == 0x03)
-			bitrate = pL1Rates[pHdr->bitrate];
-		else
-			bitrate = pV2L1Rates[pHdr->bitrate];
+            bitrate = pL1Rates[pHdr->bitrate];
+        else
+            bitrate = pV2L1Rates[pHdr->bitrate];
     }
 
     if (pHdr->layer == 3) { /* Layer 1 */
@@ -94,7 +94,7 @@ static void mp3PrintHeader(mp3Header *pHdr)
     int pL1Rates[] =   {   0,  32,  64,  96, 128, 160, 192, 224, 256, 288, 320, 352, 384, 416, 448,  -1 };
     int pL2Rates[] =   {   0,  32,  48,  56,  64,  80,  96, 112, 128, 160, 192, 224, 256, 320, 384,  -1 };
     int pV1L3Rates[] = {   0,  32,  40,  48,  56,  64,  80,  96, 112, 128, 160, 192, 224, 256, 320,  -1 };
-	int pV2L1Rates[] = {   0,  32,  48,  56,  64,  80,  96, 112, 128, 144, 160, 176, 192, 224, 256,  -1 };
+    int pV2L1Rates[] = {   0,  32,  48,  56,  64,  80,  96, 112, 128, 144, 160, 176, 192, 224, 256,  -1 };
     int pV2L3Rates[] = {   0,   8,  16,  24,  32,  40,  48,  56,  64,  80,  96, 112, 128, 144, 160,  -1 };
 
     int pRate[4][4] = {
@@ -107,20 +107,20 @@ static void mp3PrintHeader(mp3Header *pHdr)
     int bitrate;
 
     if (pHdr->layer == 0x01) {
-		if (pHdr->version == 0x03)
-			bitrate = pV1L3Rates[pHdr->bitrate];
-		else
-			bitrate = pV2L3Rates[pHdr->bitrate];
+        if (pHdr->version == 0x03)
+            bitrate = pV1L3Rates[pHdr->bitrate];
+        else
+            bitrate = pV2L3Rates[pHdr->bitrate];
     } else if (pHdr->layer == 0x02) {
         if (pHdr->version == 0x03)
-			bitrate = pL2Rates[pHdr->bitrate];
-		else
-			bitrate = pV2L3Rates[pHdr->bitrate];
+            bitrate = pL2Rates[pHdr->bitrate];
+        else
+            bitrate = pV2L3Rates[pHdr->bitrate];
     } else {
         if (pHdr->version == 0x03)
-			bitrate = pL1Rates[pHdr->bitrate];
-		else
-			bitrate = pV2L1Rates[pHdr->bitrate];
+            bitrate = pL1Rates[pHdr->bitrate];
+        else
+            bitrate = pV2L1Rates[pHdr->bitrate];
     }
 
     audioInfo.mp3SampleRate = pRate[pHdr->version][pHdr->samfreq];
