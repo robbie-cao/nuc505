@@ -245,18 +245,18 @@ static void vCheckTask( void *pvParameters );
 
 int main(void)
 {
-	/* Configure the hardware ready to run the test. */
-	prvSetupHardware();
-//	GPIO_SetMode(PB,BIT2,GPIO_MODE_OUTPUT);
-//	PB2_DOUT=1;
+    /* Configure the hardware ready to run the test. */
+    prvSetupHardware();
+    //	GPIO_SetMode(PB,BIT2,GPIO_MODE_OUTPUT);
+    //	PB2_DOUT=1;
 
-	/* Relocate vector table in SRAM for fast interrupt handling. */
+    /* Relocate vector table in SRAM for fast interrupt handling. */
     {
         extern uint32_t __Vectors[];
         extern uint32_t __Vectors_Size[];
         extern uint32_t Image$$ER_VECTOR2$$ZI$$Base[];
 
-			printf("Relocate vector table in SRAM (0x%08X) for fast interrupt handling. count:%d\n", Image$$ER_VECTOR2$$ZI$$Base,(unsigned int) __Vectors_Size);
+        printf("Relocate vector table in SRAM (0x%08X) for fast interrupt handling. count:%d\n", Image$$ER_VECTOR2$$ZI$$Base,(unsigned int) __Vectors_Size);
         memcpy((void *) Image$$ER_VECTOR2$$ZI$$Base, (void *) __Vectors, (unsigned int) __Vectors_Size);
         SCB->VTOR = (uint32_t) Image$$ER_VECTOR2$$ZI$$Base;
     }
@@ -266,61 +266,61 @@ int main(void)
 #endif
 
 
-	/* Start standard demo/test application flash tasks.  See the comments at
-	the top of this file.  The LED flash tasks are always created.  The other
-	tasks are only created if mainCREATE_SIMPLE_LED_FLASHER_DEMO_ONLY is set to
-	0 (at the top of this file).  See the comments at the top of this file for
-	more information. */
+    /* Start standard demo/test application flash tasks.  See the comments at
+       the top of this file.  The LED flash tasks are always created.  The other
+       tasks are only created if mainCREATE_SIMPLE_LED_FLASHER_DEMO_ONLY is set to
+       0 (at the top of this file).  See the comments at the top of this file for
+       more information. */
 
-//	vStartLEDFlashTasks( mainFLASH_TASK_PRIORITY );
-	vStartAPPTasks( mainAPP_TASK_PRIORITY );
+    //	vStartLEDFlashTasks( mainFLASH_TASK_PRIORITY );
+    vStartAPPTasks( mainAPP_TASK_PRIORITY );
 
-	vStartPolledQueueTasks( mainQUEUE_POLL_PRIORITY );
+    vStartPolledQueueTasks( mainQUEUE_POLL_PRIORITY );
 
-	/* The following function will only create more tasks and timers if
-	mainCREATE_SIMPLE_LED_FLASHER_DEMO_ONLY is set to 0 (at the top of this
-	file).  See the comments at the top of this file for more information. */
-	//prvOptionallyCreateComprehensveTestApplication();
+    /* The following function will only create more tasks and timers if
+       mainCREATE_SIMPLE_LED_FLASHER_DEMO_ONLY is set to 0 (at the top of this
+       file).  See the comments at the top of this file for more information. */
+    //prvOptionallyCreateComprehensveTestApplication();
 
-	printf("FreeRTOS is starting ...\n");
-	/* Start the scheduler. */
-	vTaskStartScheduler();
+    printf("FreeRTOS is starting ...\n");
+    /* Start the scheduler. */
+    vTaskStartScheduler();
 
-	/* If all is well, the scheduler will now be running, and the following line
-	will never be reached.  If the following line does execute, then there was
-	insufficient FreeRTOS heap memory available for the idle and/or timer tasks
-	to be created.  See the memory management section on the FreeRTOS web site
-	for more details. */
-	for( ;; );
+    /* If all is well, the scheduler will now be running, and the following line
+       will never be reached.  If the following line does execute, then there was
+       insufficient FreeRTOS heap memory available for the idle and/or timer tasks
+       to be created.  See the memory management section on the FreeRTOS web site
+       for more details. */
+    for( ;; );
 }
 /*-----------------------------------------------------------*/
 
 void I2S_Init(void)
 {
-		/* Enable I2S Module clock */
+    /* Enable I2S Module clock */
     CLK_EnableModuleClock(I2S_MODULE);
-		/* I2S module clock from APLL */
-	//FIXME APLL CLOCK
-		// ideal clock is 49.152MHz, real clock is 49152031Hz
-	CLK_SET_APLL(CLK_APLL_49152031);	// APLL is 49152031Hz for 48000Hz
-//	CLK_SET_APLL(CLK_APLL_45158425);	// APLL is 45158425Hz for 44100Hz
-	CLK_SetModuleClock(I2S_MODULE, CLK_I2S_SRC_APLL, 0);	// 1 means (APLL/2)
+    /* I2S module clock from APLL */
+    //FIXME APLL CLOCK
+    // ideal clock is 49.152MHz, real clock is 49152031Hz
+    CLK_SET_APLL(CLK_APLL_49152031);	// APLL is 49152031Hz for 48000Hz
+    //	CLK_SET_APLL(CLK_APLL_45158425);	// APLL is 45158425Hz for 44100Hz
+    CLK_SetModuleClock(I2S_MODULE, CLK_I2S_SRC_APLL, 0);	// 1 means (APLL/2)
     /* Reset IP */
     SYS_ResetModule(I2S_RST);
     /*---------------------------------------------------------------------------------------------------------*/
     /* Init I/O Multi-function                                                                                 */
     /*---------------------------------------------------------------------------------------------------------*/
     /* Configure multi-function pins for I2S */
-		// GPC[8]  = MCLK
-		// GPC[9]  = DIN
-		// GPC[10] = DOUT
-		// GPC[11] = LRCLK
-		// GPC[12] = BCLK
-		SYS->GPC_MFPH  = (SYS->GPC_MFPH & (~SYS_GPC_MFPH_PC8MFP_Msk) ) | SYS_GPC_MFPH_PC8MFP_I2S_MCLK;
-		SYS->GPC_MFPH  = (SYS->GPC_MFPH & (~SYS_GPC_MFPH_PC9MFP_Msk) ) | SYS_GPC_MFPH_PC9MFP_I2S_DIN;
-		SYS->GPC_MFPH  = (SYS->GPC_MFPH & (~SYS_GPC_MFPH_PC10MFP_Msk) ) | SYS_GPC_MFPH_PC10MFP_I2S_DOUT;
-		SYS->GPC_MFPH  = (SYS->GPC_MFPH & (~SYS_GPC_MFPH_PC11MFP_Msk) ) | SYS_GPC_MFPH_PC11MFP_I2S_LRCLK;
-		SYS->GPC_MFPH  = (SYS->GPC_MFPH & (~SYS_GPC_MFPH_PC12MFP_Msk) ) | SYS_GPC_MFPH_PC12MFP_I2S_BCLK;
+    // GPC[8]  = MCLK
+    // GPC[9]  = DIN
+    // GPC[10] = DOUT
+    // GPC[11] = LRCLK
+    // GPC[12] = BCLK
+    SYS->GPC_MFPH  = (SYS->GPC_MFPH & (~SYS_GPC_MFPH_PC8MFP_Msk) ) | SYS_GPC_MFPH_PC8MFP_I2S_MCLK;
+    SYS->GPC_MFPH  = (SYS->GPC_MFPH & (~SYS_GPC_MFPH_PC9MFP_Msk) ) | SYS_GPC_MFPH_PC9MFP_I2S_DIN;
+    SYS->GPC_MFPH  = (SYS->GPC_MFPH & (~SYS_GPC_MFPH_PC10MFP_Msk) ) | SYS_GPC_MFPH_PC10MFP_I2S_DOUT;
+    SYS->GPC_MFPH  = (SYS->GPC_MFPH & (~SYS_GPC_MFPH_PC11MFP_Msk) ) | SYS_GPC_MFPH_PC11MFP_I2S_LRCLK;
+    SYS->GPC_MFPH  = (SYS->GPC_MFPH & (~SYS_GPC_MFPH_PC12MFP_Msk) ) | SYS_GPC_MFPH_PC12MFP_I2S_BCLK;
 
 }
 
@@ -336,26 +336,26 @@ unsigned long get_fattime (void)
 static void prvSetupHardware( void )
 {
 
-	    /* Enable  XTAL */
+    /* Enable  XTAL */
     CLK->PWRCTL |= CLK_PWRCTL_HXTEN_Msk;
 
-		CLK_SetCoreClock(96000000);
+    CLK_SetCoreClock(96000000);
     /* Update System Core Clock */
     SystemCoreClockUpdate();
 
-		// Set APB clock as 1/2 HCLK
-		CLK_SetModuleClock(PCLK_MODULE, NULL, 1);
+    // Set APB clock as 1/2 HCLK
+    CLK_SetModuleClock(PCLK_MODULE, NULL, 1);
 
     /* Enable IP clock */
     CLK_EnableModuleClock(UART0_MODULE);
     CLK_EnableModuleClock(TMR0_MODULE);
-		CLK_EnableModuleClock(TMR1_MODULE);
+    CLK_EnableModuleClock(TMR1_MODULE);
 
     /* Select IP clock source */
     //CLK_SetModuleClock(UART0_MODULE, CLK_CLKSEL1_UARTSEL_HXT, CLK_CLKDIV0_UART(1));
-		CLK_SetModuleClock(UART0_MODULE, CLK_UART0_SRC_EXT, 0);
+    CLK_SetModuleClock(UART0_MODULE, CLK_UART0_SRC_EXT, 0);
     CLK_SetModuleClock(TMR0_MODULE, CLK_TMR0_SRC_EXT, 0);
-		CLK_SetModuleClock(TMR1_MODULE, CLK_TMR1_SRC_EXT, 0);
+    CLK_SetModuleClock(TMR1_MODULE, CLK_TMR1_SRC_EXT, 0);
 
     /*---------------------------------------------------------------------------------------------------------*/
     /* Init I/O Multi-function                                                                                 */
@@ -364,102 +364,102 @@ static void prvSetupHardware( void )
     SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB0MFP_Msk) ) | SYS_GPB_MFPL_PB0MFP_UART0_TXD;
     SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB1MFP_Msk) ) | SYS_GPB_MFPL_PB1MFP_UART0_RXD;
 
-	    /* Reset UART module */
+    /* Reset UART module */
     SYS_ResetModule(UART0_RST);
-	/* Init UART to 115200-8n1 for print message */
+    /* Init UART to 115200-8n1 for print message */
     UART_Open(UART0, 115200);
 
-		//SD0_Init defined SDH_GPIO_GC
+    //SD0_Init defined SDH_GPIO_GC
     // The group C are GPC0~2, GPC4~7
     SYS->GPC_MFPL &= (~0x77770777);
     SYS->GPC_MFPL |=   0x11110111;
 
-		printf("rc=%d\n", (WORD)disk_initialize(0));
-		disk_read(0, Buff, 2, 1);
+    printf("rc=%d\n", (WORD)disk_initialize(0));
+    disk_read(0, Buff, 2, 1);
     //f_mount(0, &FatFs[0]);  // for FATFS v0.09
     f_mount(&FatFs[0], "", 0);  // for FATFS v0.11
 
-		/* Init I2S, IP clock and multi-function I/O */
-		I2S_Init();
+    /* Init I2S, IP clock and multi-function I/O */
+    I2S_Init();
 }
 /*-----------------------------------------------------------*/
 
 void vApplicationMallocFailedHook( void )
 {
-	/* vApplicationMallocFailedHook() will only be called if
-	configUSE_MALLOC_FAILED_HOOK is set to 1 in FreeRTOSConfig.h.  It is a hook
-	function that will get called if a call to pvPortMalloc() fails.
-	pvPortMalloc() is called internally by the kernel whenever a task, queue,
-	timer or semaphore is created.  It is also called by various parts of the
-	demo application.  If heap_1.c or heap_2.c are used, then the size of the
-	heap available to pvPortMalloc() is defined by configTOTAL_HEAP_SIZE in
-	FreeRTOSConfig.h, and the xPortGetFreeHeapSize() API function can be used
-	to query the size of free heap space that remains (although it does not
-	provide information on how the remaining heap might be fragmented). */
-	taskDISABLE_INTERRUPTS();
-	for( ;; );
+    /* vApplicationMallocFailedHook() will only be called if
+       configUSE_MALLOC_FAILED_HOOK is set to 1 in FreeRTOSConfig.h.  It is a hook
+       function that will get called if a call to pvPortMalloc() fails.
+       pvPortMalloc() is called internally by the kernel whenever a task, queue,
+       timer or semaphore is created.  It is also called by various parts of the
+       demo application.  If heap_1.c or heap_2.c are used, then the size of the
+       heap available to pvPortMalloc() is defined by configTOTAL_HEAP_SIZE in
+       FreeRTOSConfig.h, and the xPortGetFreeHeapSize() API function can be used
+       to query the size of free heap space that remains (although it does not
+       provide information on how the remaining heap might be fragmented). */
+    taskDISABLE_INTERRUPTS();
+    for( ;; );
 }
 /*-----------------------------------------------------------*/
 
 void vApplicationIdleHook( void )
 {
-	/* vApplicationIdleHook() will only be called if configUSE_IDLE_HOOK is set
-	to 1 in FreeRTOSConfig.h.  It will be called on each iteration of the idle
-	task.  It is essential that code added to this hook function never attempts
-	to block in any way (for example, call xQueueReceive() with a block time
-	specified, or call vTaskDelay()).  If the application makes use of the
-	vTaskDelete() API function (as this demo application does) then it is also
-	important that vApplicationIdleHook() is permitted to return to its calling
-	function, because it is the responsibility of the idle task to clean up
-	memory allocated by the kernel to any task that has since been deleted. */
+    /* vApplicationIdleHook() will only be called if configUSE_IDLE_HOOK is set
+       to 1 in FreeRTOSConfig.h.  It will be called on each iteration of the idle
+       task.  It is essential that code added to this hook function never attempts
+       to block in any way (for example, call xQueueReceive() with a block time
+       specified, or call vTaskDelay()).  If the application makes use of the
+       vTaskDelete() API function (as this demo application does) then it is also
+       important that vApplicationIdleHook() is permitted to return to its calling
+       function, because it is the responsibility of the idle task to clean up
+       memory allocated by the kernel to any task that has since been deleted. */
 }
 /*-----------------------------------------------------------*/
 
 void vApplicationStackOverflowHook( xTaskHandle pxTask, signed char *pcTaskName )
 {
-	( void ) pcTaskName;
-	( void ) pxTask;
+    ( void ) pcTaskName;
+    ( void ) pxTask;
 
-	/* Run time stack overflow checking is performed if
-	configCHECK_FOR_STACK_OVERFLOW is defined to 1 or 2.  This hook
-	function is called if a stack overflow is detected. */
-	taskDISABLE_INTERRUPTS();
-	for( ;; );
+    /* Run time stack overflow checking is performed if
+       configCHECK_FOR_STACK_OVERFLOW is defined to 1 or 2.  This hook
+       function is called if a stack overflow is detected. */
+    taskDISABLE_INTERRUPTS();
+    for( ;; );
 }
 /*-----------------------------------------------------------*/
 
 void vApplicationTickHook( void )
 {
-	/* This function will be called by each tick interrupt if
-	configUSE_TICK_HOOK is set to 1 in FreeRTOSConfig.h.  User code can be
-	added here, but the tick hook is called from an interrupt context, so
-	code must not attempt to block, and only the interrupt safe FreeRTOS API
-	functions can be used (those that end in FromISR()).  */
+    /* This function will be called by each tick interrupt if
+       configUSE_TICK_HOOK is set to 1 in FreeRTOSConfig.h.  User code can be
+       added here, but the tick hook is called from an interrupt context, so
+       code must not attempt to block, and only the interrupt safe FreeRTOS API
+       functions can be used (those that end in FromISR()).  */
 
-	#if ( mainCREATE_SIMPLE_BLINKY_DEMO_ONLY == 0 )
-	{
-		/* In this case the tick hook is used as part of the queue set test. */
-		vQueueSetAccessQueueSetFromISR();
-	}
-	#endif /* mainCREATE_SIMPLE_BLINKY_DEMO_ONLY */
+#if ( mainCREATE_SIMPLE_BLINKY_DEMO_ONLY == 0 )
+    {
+        /* In this case the tick hook is used as part of the queue set test. */
+        vQueueSetAccessQueueSetFromISR();
+    }
+#endif /* mainCREATE_SIMPLE_BLINKY_DEMO_ONLY */
 }
 /*-----------------------------------------------------------*/
 #ifdef CHECK_TEST
 static void vCheckTask( void *pvParameters )
 {
-	portTickType xLastExecutionTime;
+    portTickType xLastExecutionTime;
 
-	xLastExecutionTime = xTaskGetTickCount();
+    xLastExecutionTime = xTaskGetTickCount();
 
-	printf("Check Task is running by message\n");
+    printf("Check Task is running by message\n");
 
     for( ;; )
-	{
-		/* Perform this check every mainCHECK_DELAY milliseconds. */
-		vTaskDelayUntil( &xLastExecutionTime, mainCHECK_DELAY );
-		if( xArePollingQueuesStillRunning() != pdTRUE )
+    {
+        /* Perform this check every mainCHECK_DELAY milliseconds. */
+        vTaskDelayUntil( &xLastExecutionTime, mainCHECK_DELAY );
+        if( xArePollingQueuesStillRunning() != pdTRUE )
         {
-			printf( "ERROR IN POLL Q\n" );
+            printf( "ERROR IN POLL Q\n" );
         }
     }
 }
