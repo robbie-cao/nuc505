@@ -174,9 +174,9 @@ void WAVPlayer(void)
                 bAudioPlaying = 1;
                 I2S_SET_TX_TH_LEVEL(I2S, I2S_FIFO_TX_LEVEL_WORD_15);
                 I2S_SET_RX_TH_LEVEL(I2S, I2S_FIFO_RX_LEVEL_WORD_16);
-                I2S_SET_TXDMA_STADDR(I2S, (uint32_t) &aPCMBuffer[0][0]);													// Tx Start Address
-                I2S_SET_TXDMA_THADDR(I2S, (uint32_t) &aPCMBuffer[0][PCM_BUFFER_SIZE-1]);			// Tx Threshold Address
-                I2S_SET_TXDMA_EADDR(I2S, (uint32_t) &aPCMBuffer[1][PCM_BUFFER_SIZE-1]);			// Tx End Address
+                I2S_SET_TXDMA_STADDR(I2S, (uint32_t) &aPCMBuffer[0][0]);                 // Tx Start Address
+                I2S_SET_TXDMA_THADDR(I2S, (uint32_t) &aPCMBuffer[0][PCM_BUFFER_SIZE-1]); // Tx Threshold Address
+                I2S_SET_TXDMA_EADDR(I2S, (uint32_t) &aPCMBuffer[1][PCM_BUFFER_SIZE-1]);  // Tx End Address
                 I2S_ENABLE_TXDMA(I2S);
                 I2S_ENABLE_TX(I2S);
                 I2S_EnableInt(I2S, (I2S_IEN_TDMATIEN_Msk|I2S_IEN_TDMAEIEN_Msk));
@@ -184,10 +184,10 @@ void WAVPlayer(void)
                 printf("Start Playing ...\n");
             }
 
-            //            while((aPCMBuffer_Full[0] == 1) && (aPCMBuffer_Full[1] == 1));
+            // while((aPCMBuffer_Full[0] == 1) && (aPCMBuffer_Full[1] == 1));
             if(aPCMBuffer_Full[0] == 1)
                 while(aPCMBuffer_Full[0]);
-            //            printf(".");
+            // printf(".");
         }
 
         if ( u32WavBit == I2S_DATABIT_24 )
@@ -216,7 +216,7 @@ void WAVPlayer(void)
 
         u8PCMBufferTargetIdx ^= 1;
 
-        //      printf("change to ==>%d\n", u8PCMBufferTargetIdx);
+        // printf("change to ==>%d\n", u8PCMBufferTargetIdx);
     }
 
     I2S_DISABLE_TX(I2S);
