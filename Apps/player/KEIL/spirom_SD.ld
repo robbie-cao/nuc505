@@ -6,12 +6,12 @@ LR_ROM      0x00000000  0x00200000  ; 2MB (SPI FLash)
     {
         startup_nuc505Series.o(RESET, +First)
 	}
-    
+
     ER_RO +0
 	{
 		*(+RO)
 	}
-    
+
     ER_APPCODE     0x20000000  0x00010000
     {
 		clk.o(+RO)	; CLK_SetCoreClock() may take a long time if it is run on SPI Flash. Locate this function on SRAM for speed.
@@ -22,7 +22,7 @@ LR_ROM      0x00000000  0x00200000  ; 2MB (SPI FLash)
 		sd*.o(+RO)
 		wavplayer.o(+RO)
 	}
-    
+
     ER_RW           +0
 	{
 		*(+RW)
@@ -30,7 +30,7 @@ LR_ROM      0x00000000  0x00200000  ; 2MB (SPI FLash)
 }
 
 LR_RAM      0x20010000  0x00010000
-{	
+{
 	ER_ZI +0
 	{
 		*(+ZI)
