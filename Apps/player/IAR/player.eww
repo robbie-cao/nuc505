@@ -2,7 +2,7 @@
 
 <workspace>
   <project>
-    <path>$WS_DIR$\I2S_WAVPLAYER_SD.ewp</path>
+    <path>$WS_DIR$\player.ewp</path>
   </project>
   <batchBuild>
     <batchDefinition>

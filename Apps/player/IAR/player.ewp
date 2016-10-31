@@ -12,7 +12,7 @@
       <name>General</name>
       <archiveVersion>3</archiveVersion>
       <data>
-        <version>21</version>
+        <version>24</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>0</debug>
         <option>
@@ -26,11 +26,6 @@
         <option>
           <name>ListPath</name>
           <state>Release\List</state>
-        </option>
-        <option>
-          <name>Variant</name>
-          <version>19</version>
-          <state>39</state>
         </option>
         <option>
           <name>GEndianMode</name>
@@ -59,11 +54,6 @@
           <state>0</state>
         </option>
         <option>
-          <name>FPU</name>
-          <version>2</version>
-          <state>5</state>
-        </option>
-        <option>
           <name>OGCoreOrChip</name>
           <state>1</state>
         </option>
@@ -87,7 +77,7 @@
         </option>
         <option>
           <name>OGLastSavedByProductVersion</name>
-          <state>6.21.1.52845</state>
+          <state>7.60.2.11347</state>
         </option>
         <option>
           <name>GeneralEnableMisra</name>
@@ -136,14 +126,9 @@
           <state>$TOOLKIT_DIR$\INC\c\DLib_Config_Full.h</state>
         </option>
         <option>
-          <name>GFPUCoreSlave</name>
-          <version>19</version>
-          <state>38</state>
-        </option>
-        <option>
           <name>GBECoreSlave</name>
-          <version>19</version>
-          <state>39</state>
+          <version>24</version>
+          <state>40</state>
         </option>
         <option>
           <name>OGUseCmsis</name>
@@ -153,15 +138,51 @@
           <name>OGUseCmsisDspLib</name>
           <state>0</state>
         </option>
+        <option>
+          <name>GRuntimeLibThreads</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>CoreVariant</name>
+          <version>24</version>
+          <state>39</state>
+        </option>
+        <option>
+          <name>GFPUDeviceSlave</name>
+          <state>NUC505 series	Nuvoton NUC505 series</state>
+        </option>
+        <option>
+          <name>FPU2</name>
+          <version>0</version>
+          <state>4</state>
+        </option>
+        <option>
+          <name>NrRegs</name>
+          <version>0</version>
+          <state>1</state>
+        </option>
+        <option>
+          <name>NEON</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>GFPUCoreSlave2</name>
+          <version>24</version>
+          <state>39</state>
+        </option>
       </data>
     </settings>
     <settings>
       <name>ICCARM</name>
       <archiveVersion>2</archiveVersion>
       <data>
-        <version>28</version>
+        <version>31</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>0</debug>
+        <option>
+          <name>CCOptimizationNoSizeConstraints</name>
+          <state>0</state>
+        </option>
         <option>
           <name>CCDefines</name>
           <state></state>
@@ -225,7 +246,7 @@
         <option>
           <name>CCAllowList</name>
           <version>1</version>
-          <state>0000000</state>
+          <state>00000000</state>
         </option>
         <option>
           <name>CCDebugInfo</name>
@@ -293,10 +314,10 @@
         </option>
         <option>
           <name>CCIncludePath2</name>
-          <state>$PROJ_DIR$\..\..\..\..\Library\CMSIS\Include</state>
-          <state>$PROJ_DIR$\..\..\..\..\Library\Device\Nuvoton\NUC505Series\Include</state>
-          <state>$PROJ_DIR$\..\..\..\..\Library\StdDriver\inc</state>
-          <state>$PROJ_DIR$\..\..\..\..\ThirdParty\FATFS\src</state>
+          <state>$PROJ_DIR$\..\..\..\Library\CMSIS\Include</state>
+          <state>$PROJ_DIR$\..\..\..\Library\Device\Nuvoton\NUC505Series\Include</state>
+          <state>$PROJ_DIR$\..\..\..\Library\StdDriver\inc</state>
+          <state>$PROJ_DIR$\..\..\..\ThirdParty\FATFS\src</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
@@ -389,13 +410,26 @@
           <name>IccFloatSemantics</name>
           <state>0</state>
         </option>
+        <option>
+          <name>CCNoLiteralPool</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>CCOptStrategySlave</name>
+          <version>0</version>
+          <state>0</state>
+        </option>
+        <option>
+          <name>CCGuardCalls</name>
+          <state>1</state>
+        </option>
       </data>
     </settings>
     <settings>
       <name>AARM</name>
       <archiveVersion>2</archiveVersion>
       <data>
-        <version>8</version>
+        <version>9</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>0</debug>
         <option>
@@ -551,6 +585,10 @@
           <name>AExtraOptionsV2</name>
           <state></state>
         </option>
+        <option>
+          <name>AsmNoLiteralPool</name>
+          <state>0</state>
+        </option>
       </data>
     </settings>
     <settings>
@@ -562,8 +600,8 @@
         <debug>0</debug>
         <option>
           <name>OOCOutputFormat</name>
-          <version>2</version>
-          <state>2</state>
+          <version>3</version>
+          <state>3</state>
         </option>
         <option>
           <name>OCOutputOverride</name>
@@ -571,7 +609,7 @@
         </option>
         <option>
           <name>OOCOutputFile</name>
-          <state>I2S_WAVPLAYER_SD.bin</state>
+          <state>player.bin</state>
         </option>
         <option>
           <name>OOCCommandLineProducer</name>
@@ -589,6 +627,7 @@
       <data>
         <extensions></extensions>
         <cmdline></cmdline>
+        <hasPrio>0</hasPrio>
       </data>
     </settings>
     <settings>
@@ -608,7 +647,7 @@
       <name>ILINK</name>
       <archiveVersion>0</archiveVersion>
       <data>
-        <version>13</version>
+        <version>17</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>0</debug>
         <option>
@@ -625,7 +664,7 @@
         </option>
         <option>
           <name>IlinkOutputFile</name>
-          <state>I2S_WAVPLAYER_SD.out</state>
+          <state>player.out</state>
         </option>
         <option>
           <name>IlinkDebugInfoEnable</name>
@@ -777,10 +816,6 @@
           <state>1</state>
         </option>
         <option>
-          <name>CrcAlgo</name>
-          <state>1</state>
-        </option>
-        <option>
           <name>CrcPoly</name>
           <state>0x11021</state>
         </option>
@@ -870,6 +905,36 @@
           <name>IlinkOptForceVfe</name>
           <state>0</state>
         </option>
+        <option>
+          <name>IlinkStackAnalysisEnable</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>IlinkStackControlFile</name>
+          <state></state>
+        </option>
+        <option>
+          <name>IlinkStackCallGraphFile</name>
+          <state></state>
+        </option>
+        <option>
+          <name>CrcAlgorithm</name>
+          <version>0</version>
+          <state>1</state>
+        </option>
+        <option>
+          <name>CrcUnitSize</name>
+          <version>0</version>
+          <state>0</state>
+        </option>
+        <option>
+          <name>IlinkThreadsSlave</name>
+          <state>1</state>
+        </option>
+        <option>
+          <name>IlinkLogCallGraph</name>
+          <state>0</state>
+        </option>
       </data>
     </settings>
     <settings>
@@ -902,37 +967,37 @@
   <group>
     <name>CMSIS</name>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\Library\Device\Nuvoton\NUC505Series\Source\IAR\startup_NUC505Series.s</name>
+      <name>$PROJ_DIR$\..\..\..\Library\Device\Nuvoton\NUC505Series\Source\IAR\startup_NUC505Series.s</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\Library\Device\Nuvoton\NUC505Series\Source\system_NUC505Series.c</name>
+      <name>$PROJ_DIR$\..\..\..\Library\Device\Nuvoton\NUC505Series\Source\system_NUC505Series.c</name>
     </file>
   </group>
   <group>
     <name>FATFS</name>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\ThirdParty\FATFS\src\ff.c</name>
+      <name>$PROJ_DIR$\..\..\..\ThirdParty\FATFS\src\ff.c</name>
     </file>
   </group>
   <group>
     <name>Library</name>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\Library\StdDriver\src\clk.c</name>
+      <name>$PROJ_DIR$\..\..\..\Library\StdDriver\src\clk.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\Library\StdDriver\src\i2s.c</name>
+      <name>$PROJ_DIR$\..\..\..\Library\StdDriver\src\i2s.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\Library\StdDriver\src\retarget.c</name>
+      <name>$PROJ_DIR$\..\..\..\Library\StdDriver\src\retarget.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\Library\StdDriver\src\sd.c</name>
+      <name>$PROJ_DIR$\..\..\..\Library\StdDriver\src\sd.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\Library\StdDriver\src\sys.c</name>
+      <name>$PROJ_DIR$\..\..\..\Library\StdDriver\src\sys.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\Library\StdDriver\src\uart.c</name>
+      <name>$PROJ_DIR$\..\..\..\Library\StdDriver\src\uart.c</name>
     </file>
   </group>
   <group>
@@ -954,3 +1019,5 @@
     </file>
   </group>
 </project>
+
+
