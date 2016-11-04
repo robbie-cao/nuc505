@@ -23,8 +23,8 @@ The NUC505 series is also equipped with plenty of peripheral devices, such as US
 
 Typical case:
 
-- Debug in Keil MDK-ARM (UV4): Set SW1-4 to **1110**
-- Programming into Internal SPI Flash with ICP: Set SW1-4 to **1101** before programing and then **1111** after programming done
+- Debug in Keil MDK-ARM (UV4): Set SW4-1 to **0111**
+- Programming into Internal SPI Flash with ICP: Set SW4-1 to **1011** before programing and then **1111** after programming done
 
 ## Software
 
