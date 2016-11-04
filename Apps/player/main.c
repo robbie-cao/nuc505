@@ -63,20 +63,32 @@ void InternalCODEC_Setup()
 
     I2S_SET_INTERNAL_CODEC(I2S, 0x08, 0x1F);    // Mute headphone of Left channel
     I2S_SET_INTERNAL_CODEC(I2S, 0x09, 0x1F);    // Mute headphone of Right channel
+    I2S_SET_INTERNAL_CODEC(I2S, 0x10, 0x0F);	// Mute the ADC Left channel volume
+    I2S_SET_INTERNAL_CODEC(I2S, 0x11, 0x0F);	// Mute the ADC Right channel volume
+    I2S_SET_INTERNAL_CODEC(I2S, 0x12, 0x0F);	// Mute the ADC Side tone volume
+
     I2S_SET_INTERNAL_CODEC(I2S, 0x02, 0xC0);    // Set CODEC slave
+
     I2S_SET_INTERNAL_CODEC(I2S, 0x01, 0x80);    // Digital Part Enable
+    I2S_SET_INTERNAL_CODEC(I2S, 0x0F, 0xC0);	// Enable Analog Part
+    I2S_SET_INTERNAL_CODEC(I2S, 0x0E, 0x02);	// ADC input select MIC0
+
     I2S_SET_INTERNAL_CODEC(I2S, 0x0B, 0xF3);    // Analog Part Enable
     I2S_SET_INTERNAL_CODEC(I2S, 0x0D, 0x31);    // Biasing enable
     I2S_SET_INTERNAL_CODEC(I2S, 0x0B, 0xE3);
-    for (i=0; i < 15; i++){
+    for (i=0; i < 15; i++) {
         // Delay 1.5s~2.5s
         CLK_SysTickDelay(100000);
     }
     I2S_SET_INTERNAL_CODEC(I2S, 0x0A, 0x09);
     I2S_SET_INTERNAL_CODEC(I2S, 0x0B, 0xF0);
-    CLK_SysTickDelay(100);  //Delay 100uS
+    I2S_SET_INTERNAL_CODEC(I2S, 0x00, 0xD0);	// ADC digital enabled
+
+    CLK_SysTickDelay(100000);  // Delay 100 ms
     I2S_SET_INTERNAL_CODEC(I2S, 0x08, 0x06);    // Un-mute Headphone and set volume
     I2S_SET_INTERNAL_CODEC(I2S, 0x09, 0x06);    // Un-mute Headphone and set volume
+    I2S_SET_INTERNAL_CODEC(I2S, 0x10, 0x18);	// Un-Mute the ADC Left channel volume
+    I2S_SET_INTERNAL_CODEC(I2S, 0x11, 0x08);	// Un-Mute the ADC Right channel volume
 
     /* If Fs is changed, please Mute Headphone First and soft reset digital part after MCLK is stable. */
 

@@ -23,10 +23,15 @@ FIL    wavFileObject;
 size_t ReturnSize;
 
 uint32_t aPCMBuffer[2][PCM_BUFFER_SIZE];
+#if 0
 //12288=(PCM_BUFFER_SIZE*4)-(PCM_BUFFER_SIZE*4/4)
 uint8_t aPCMBuffer2[12288];
+#endif
 volatile uint8_t aPCMBuffer_Full[2]= {0,0};
 uint32_t aWavHeader[11];
+
+int16_t PcmRxBuff[2][BUFF_LEN*2] = {0};
+int16_t PcmTxBuff[2][BUFF_LEN*2] = {0};
 
 uint8_t bAudioPlaying = 0;
 
@@ -180,6 +185,12 @@ void WAVPlayer(void)
                 I2S_ENABLE_TXDMA(I2S);
                 I2S_ENABLE_TX(I2S);
                 I2S_EnableInt(I2S, (I2S_IEN_TDMATIEN_Msk|I2S_IEN_TDMAEIEN_Msk));
+                I2S_SET_RXDMA_STADDR(I2S, (uint32_t) &PcmRxBuff[0]);								// Rx Start Address
+                I2S_SET_RXDMA_THADDR(I2S, (uint32_t) &PcmRxBuff[0][BUFF_LEN*2-2]);	// Rx Threshold Address
+                I2S_SET_RXDMA_EADDR( I2S, (uint32_t) &PcmRxBuff[1][BUFF_LEN*2-2]);	// Rx End Address
+                I2S_ENABLE_RXDMA(I2S);
+                I2S_ENABLE_RX(I2S);
+                I2S_EnableInt(I2S, (I2S_IEN_RDMATIEN_Msk|I2S_IEN_RDMAEIEN_Msk));
                 NVIC_EnableIRQ(I2S_IRQn);
                 printf("Start Playing ...\n");
             }
@@ -190,6 +201,7 @@ void WAVPlayer(void)
             // printf(".");
         }
 
+#if 0
         if ( u32WavBit == I2S_DATABIT_24 )
         {
             //12288=(PCM_BUFFER_SIZE*4)-(PCM_BUFFER_SIZE*4/4)
@@ -200,8 +212,12 @@ void WAVPlayer(void)
                 aPCMBuffer[u8PCMBufferTargetIdx][i] = (0 << 24) | (aPCMBuffer2[3*i+2] << 16) | (aPCMBuffer2[3*i+1] << 8) | aPCMBuffer2[3*i];
         }
         else
+#endif
         {
             res = f_read(&wavFileObject, &aPCMBuffer[u8PCMBufferTargetIdx][0], PCM_BUFFER_SIZE*4, &ReturnSize);
+            for ( i = 0; i < PCM_BUFFER_SIZE; i++ ) {
+                aPCMBuffer[u8PCMBufferTargetIdx][i] += PcmTxBuff[u8PCMBufferTargetIdx][i];
+            }
             if(f_eof(&wavFileObject))   break;
         }
 

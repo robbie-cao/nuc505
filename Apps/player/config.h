@@ -16,7 +16,9 @@
 /* Global variables                                                                                        */
 /*---------------------------------------------------------------------------------------------------------*/
 
-#define PCM_BUFFER_SIZE 4*1024
+#define PCM_BUFFER_SIZE 2*1024
+
+#define BUFF_LEN    	2*512 //512
 
 void WAVPlayer(void);
 void InternalCODEC_Setup(void);
