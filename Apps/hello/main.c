@@ -26,9 +26,9 @@ void SYS_Init(void)
     /* Update System Core Clock */
     SystemCoreClockUpdate();
 
-		// Set APB clock as 1/2 HCLK
-		CLK_SetModuleClock(PCLK_MODULE, NULL, 1);
-	
+    // Set APB clock as 1/2 HCLK
+    CLK_SetModuleClock(PCLK_MODULE, NULL, 1);
+
     /* Enable IP clock */
     CLK_EnableModuleClock(UART0_MODULE);
 
