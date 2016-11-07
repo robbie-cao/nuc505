@@ -59,6 +59,19 @@ Typical case:
 - NUC505 ICP Programming Tool User Guide: http://www.nuvoton.com/hq/resource-download.jsp?tp_GUID=DA01-NUC505
 - Nu-Link Command Tool: http://www.nuvoton.com/opencms/resource-download.jsp?tp_GUID=SW0520160317094731
 
+### Debug
+
+- In-Circut Emulation Debug in Keil MDK-ARM with Nuvoton Nu-Link Debugger
+
+  Load program on-line and run/stop/step/..., set breakpoings, check memory/variables/call stack/...
+
+- Log trace with `printf`
+  * To output log into UART, remove **DEBUG_ENABLE_SEMIHOST** define in **Project -> Options for Target -> C/C++ -> Preprocessor Symbols**
+
+    **UART0: TX - PIN 41, RX - PIN 42**
+
+  * With **DEBUG_ENABLE_SEMIHOST** defined, check log in Keil MDK in debug mode at **View -> Serial Windows -> UART #1**
+
 ## Boot
 
 ### Power-On Setting
