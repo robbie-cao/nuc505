@@ -570,7 +570,7 @@
         </option>
         <option>
           <name>OOCOutputFile</name>
-          <state>Template.bin</state>
+          <state>hello.bin</state>
         </option>
         <option>
           <name>OOCCommandLineProducer</name>
@@ -624,7 +624,7 @@
         </option>
         <option>
           <name>IlinkOutputFile</name>
-          <state>Template.out</state>
+          <state>hello.out</state>
         </option>
         <option>
           <name>IlinkDebugInfoEnable</name>
