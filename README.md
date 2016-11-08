@@ -106,6 +106,87 @@ The **main() on SRAM** memory model makes the idea further by moving all code/da
 
 ![](Docs/nuc505_memory_model_2.png)
 
+Memory Initialization:
+
+```
+/*********************************************************************************************************************
+ * VECMAP function is used to map the specified start address to memory address 0x0000_0000.
+ * If memory space of SPI Flash on SPIM is mapped to 0x0000_0000, any value of SYS_LVMPLEN  is allowed to map whole
+   SPI Flash on SPIM.
+ * This initialize file maps the SPI Flash on SPIM to address 0x0000_0000 through VECMAP function.
+
+ * SPIM registers must also configure correctly to map SPI Flash to 0x0000_0000. To match execution context between
+   IBR booting and Debugger, relevant settings here will be the same as IBR booting.
+ ********************************************************************************************************************/
+FUNC void SPIROMMap(void)
+{
+    _WDWORD(0x40000050, 0x00000000);    /* Specify the load VECMAP address   (reg : SYS_LVMPADDR) */
+    _WDWORD(0x40000054, 0x00000000);    /* Any value allowed to map whole SPI Flash (reg : SYS_LVMPLEN)  */
+    _WDWORD(0x4000005C, 0x00000001);    /* Load VECMAP address and length    (reg : SYS_RVMPLEN)  */
+
+                                        /* Set SPIM command to Standard Read, set OPMODE to DMM (Direct Memory Map) mode, and
+                                           disable 4-byte address mode (reg : SPIM_CTL0) */
+    _WDWORD(0x40007000, 0x03C00003);
+                                        /* Specify divider for SPI bus clock to 2 (DIVIDER=1), and
+                                           continue using IFSEL, which is assumed to match real
+                                           hardware connection (reg : SPIM_CTL1) */
+    _WDWORD(0x40007004, 0x00010010 | (_RDWORD(0x40007004) & 0x000000C0));
+}
+
+
+SPIROMMap();
+RESET
+```
+
+Scatter:
+
+```
+LR_ROM      0x00000000
+{
+    ER_STARTUP  +0
+    {
+        startup_nuc505Series.o(RESET, +First)   ; vector table
+        *(InRoot$$Sections)                     ; library init
+        ; If neither (+ input_section_attr) nor (input_section_pattern) is specified, the default is +RO.
+        startup_nuc505Series.o                  ; startup
+        system_nuc505Series.o(i.SystemInit)
+    }
+
+    ; Relocate vector table in SRAM for fast interrupt handling.
+    ER_VECTOR2  0x20000000  EMPTY   0x00000400
+    {
+    }
+
+    ER_RO       +0
+    {
+        *(+RO)
+    }
+
+    ER_RW       +0
+    {
+        *(+RW)
+    }
+
+    ER_ZI       +0
+    {
+        *(+ZI)
+    }
+}
+ScatterAssert(LoadLimit(LR_ROM) <= 0x00200000)
+ScatterAssert(ImageLimit(ER_ZI) <= 0x20020000)
+```
+
+Link Option:
+
+```
+--cpu Cortex-M4.fp ".\obj\startup_nuc505series.o" ".\obj\system_nuc505series.o" ".\obj\retarget.o" ".\obj\clk.o" ".\obj\uart.o" ".\obj\main.o" 
+--library_type=microlib --strict --scatter ".\main_on_sram.ld" 
+--map --datacompressor=off --info=inline --entry Reset_Handler 
+--autoat --summary_stderr --info summarysizes --map 
+--info sizes --info totals 
+--list ".\lst\MainOnSRAM.map" -o ".\obj\MainOnSRAM.axf"
+```
+
 #### Full on SRAM
 
 Same as the **main() on SRAM** memory model, the **Full on SRAM** memory model moves all code/data to SRAM with another approach.
