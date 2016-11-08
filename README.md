@@ -100,12 +100,6 @@ Based on the **Typical** memory model, the **Critical on SRAM** memory model mov
 
 ![](Docs/nuc505_memory_model_1.png)
 
-#### Main on SRAM
-
-The **main() on SRAM** memory model makes the idea further by moving all code/data to SRAM except unmovable part.
-
-![](Docs/nuc505_memory_model_2.png)
-
 Memory Initialization:
 
 ```
@@ -137,6 +131,63 @@ FUNC void SPIROMMap(void)
 SPIROMMap();
 RESET
 ```
+
+Scatter:
+
+```
+LR_ROM      0x00000000  0x00200000  ; 2MB (SPI FLash)
+{
+    ER_STARTUP +0
+    {
+        startup_nuc505Series.o(RESET, +First)
+    }
+
+    ER_RO   +0
+    {
+        *(+RO)
+    }
+
+    ; Relocate vector table in SRAM for fast interrupt handling.
+    ER_VECTOR2      0x20000000  EMPTY   0x00000400
+    {
+    }
+
+    ; Critical code in SRAM for fast execution. Loaded by ARM C library at startup.
+    ER_FASTCODE_INIT    0x20000400
+    {
+        clk.o(+RO); CLK_SetCoreClock() may take a long time if it is run on SPI Flash.
+    }
+
+    ER_RW   +0
+    {
+                *(+RW)
+    }
+
+    ; Critical code in SRAM for fast execution. Loaded by user.
+    ER_FASTCODE_UNINIT  +0  OVERLAY
+    {
+        *(fastcode)
+    }
+}
+
+LR_RAM      0x20010000  0x00010000
+{
+    ER_ZI +0
+    {
+        *(+ZI)
+    }
+}
+```
+
+#### Main on SRAM
+
+The **main() on SRAM** memory model makes the idea further by moving all code/data to SRAM except unmovable part.
+
+![](Docs/nuc505_memory_model_2.png)
+
+Memory Initialization:
+
+> Same as **Critical on SRAM**
 
 Scatter:
 
