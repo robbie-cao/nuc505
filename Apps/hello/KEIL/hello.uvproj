@@ -370,9 +370,9 @@
             <noStLib>0</noStLib>
             <RepFail>1</RepFail>
             <useFile>0</useFile>
-            <TextAddressRange>0x0000000</TextAddressRange>
-            <DataAddressRange>0x2001c000</DataAddressRange>
-            <ScatterFile>.\scatter.ld</ScatterFile>
+            <TextAddressRange>0x00000000</TextAddressRange>
+            <DataAddressRange>0x20000000</DataAddressRange>
+            <ScatterFile></ScatterFile>
             <IncludeLibs></IncludeLibs>
             <IncludeLibsPath></IncludeLibsPath>
             <Misc>--map --first='startup_nuc505series.o(RESET)' --datacompressor=off --info=inline --entry Reset_Handler</Misc>
