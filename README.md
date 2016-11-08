@@ -134,9 +134,13 @@ RESET
 Link Option:
 
 ```
---cpu Cortex-M4.fp ".\obj\system_nuc505series.o" ".\obj\startup_nuc505series.o" ".\obj\retarget.o" ".\obj\clk.o" ".\obj\sys.o" ".\obj\uart.o" ".\obj\main.o" --library_type=microlib --ro-base 0x00000000 --entry 0x00000000 --rw-base 0x20000000 --entry Reset_Handler --first __Vectors --strict --map --first='startup_nuc505series.o(RESET)' --datacompressor=off --info=inline --entry Reset_Handler --autoat --summary_stderr --info summarysizes --map --xref --callgraph --symbols 
+--cpu Cortex-M4.fp ".\obj\system_nuc505series.o" ".\obj\startup_nuc505series.o" ".\obj\retarget.o" ".\obj\clk.o" ".\obj\sys.o" ".\obj\uart.o" ".\obj\main.o" 
+--library_type=microlib --ro-base 0x00000000 --entry 0x00000000 --rw-base 0x20000000 
+--entry Reset_Handler --first __Vectors --strict --map 
+--first='startup_nuc505series.o(RESET)' --datacompressor=off --info=inline --entry Reset_Handler 
+--autoat --summary_stderr --info summarysizes --map --xref --callgraph --symbols 
 --info sizes --info totals --info unused --info veneers 
- --list ".\lst\hello.map" -o ".\obj\hello.axf"
+--list ".\lst\hello.map" -o ".\obj\hello.axf"
 ```
 
 #### Overlay
