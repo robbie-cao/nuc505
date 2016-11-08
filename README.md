@@ -88,21 +88,194 @@ With space and speed taken into consideration, user may apply memory models intr
 - Full on SRAM
 - Overlay.
 
+#### Typical
+
 The **Typical** memory model arranges read-only code/data on SPI Flash and the remaining on SRAM, with read/write data differently handled.
 
 ![](Docs/nuc505_memory_model_0.png)
+
+#### Critical on SRAM
 
 Based on the **Typical** memory model, the **Critical on SRAM** memory model moves critical code/data from SPI Flash to SRAM for better performance.
 
 ![](Docs/nuc505_memory_model_1.png)
 
+Memory Initialization:
+
+```
+/*********************************************************************************************************************
+ * VECMAP function is used to map the specified start address to memory address 0x0000_0000.
+ * If memory space of SPI Flash on SPIM is mapped to 0x0000_0000, any value of SYS_LVMPLEN  is allowed to map whole
+   SPI Flash on SPIM.
+ * This initialize file maps the SPI Flash on SPIM to address 0x0000_0000 through VECMAP function.
+
+ * SPIM registers must also configure correctly to map SPI Flash to 0x0000_0000. To match execution context between
+   IBR booting and Debugger, relevant settings here will be the same as IBR booting.
+ ********************************************************************************************************************/
+FUNC void SPIROMMap(void)
+{
+    _WDWORD(0x40000050, 0x00000000);    /* Specify the load VECMAP address   (reg : SYS_LVMPADDR) */
+    _WDWORD(0x40000054, 0x00000000);    /* Any value allowed to map whole SPI Flash (reg : SYS_LVMPLEN)  */
+    _WDWORD(0x4000005C, 0x00000001);    /* Load VECMAP address and length    (reg : SYS_RVMPLEN)  */
+
+                                        /* Set SPIM command to Standard Read, set OPMODE to DMM (Direct Memory Map) mode, and
+                                           disable 4-byte address mode (reg : SPIM_CTL0) */
+    _WDWORD(0x40007000, 0x03C00003);
+                                        /* Specify divider for SPI bus clock to 2 (DIVIDER=1), and
+                                           continue using IFSEL, which is assumed to match real
+                                           hardware connection (reg : SPIM_CTL1) */
+    _WDWORD(0x40007004, 0x00010010 | (_RDWORD(0x40007004) & 0x000000C0));
+}
+
+
+SPIROMMap();
+RESET
+```
+
+Scatter:
+
+```
+LR_ROM      0x00000000  0x00200000  ; 2MB (SPI FLash)
+{
+    ER_STARTUP +0
+    {
+        startup_nuc505Series.o(RESET, +First)
+    }
+
+    ER_RO   +0
+    {
+        *(+RO)
+    }
+
+    ; Relocate vector table in SRAM for fast interrupt handling.
+    ER_VECTOR2      0x20000000  EMPTY   0x00000400
+    {
+    }
+
+    ; Critical code in SRAM for fast execution. Loaded by ARM C library at startup.
+    ER_FASTCODE_INIT    0x20000400
+    {
+        clk.o(+RO); CLK_SetCoreClock() may take a long time if it is run on SPI Flash.
+    }
+
+    ER_RW   +0
+    {
+                *(+RW)
+    }
+
+    ; Critical code in SRAM for fast execution. Loaded by user.
+    ER_FASTCODE_UNINIT  +0  OVERLAY
+    {
+        *(fastcode)
+    }
+}
+
+LR_RAM      0x20010000  0x00010000
+{
+    ER_ZI +0
+    {
+        *(+ZI)
+    }
+}
+```
+
+#### Main on SRAM
+
 The **main() on SRAM** memory model makes the idea further by moving all code/data to SRAM except unmovable part.
 
 ![](Docs/nuc505_memory_model_2.png)
 
+Memory Initialization:
+
+> Same as **Critical on SRAM**
+
+Scatter:
+
+```
+LR_ROM      0x00000000
+{
+    ER_STARTUP  +0
+    {
+        startup_nuc505Series.o(RESET, +First)   ; vector table
+        *(InRoot$$Sections)                     ; library init
+        ; If neither (+ input_section_attr) nor (input_section_pattern) is specified, the default is +RO.
+        startup_nuc505Series.o                  ; startup
+        system_nuc505Series.o(i.SystemInit)
+    }
+
+    ; Relocate vector table in SRAM for fast interrupt handling.
+    ER_VECTOR2  0x20000000  EMPTY   0x00000400
+    {
+    }
+
+    ER_RO       +0
+    {
+        *(+RO)
+    }
+
+    ER_RW       +0
+    {
+        *(+RW)
+    }
+
+    ER_ZI       +0
+    {
+        *(+ZI)
+    }
+}
+ScatterAssert(LoadLimit(LR_ROM) <= 0x00200000)
+ScatterAssert(ImageLimit(ER_ZI) <= 0x20020000)
+```
+
+Link Option:
+
+```
+--cpu Cortex-M4.fp ".\obj\startup_nuc505series.o" ".\obj\system_nuc505series.o" ".\obj\retarget.o" ".\obj\clk.o" ".\obj\uart.o" ".\obj\main.o" 
+--library_type=microlib --strict --scatter ".\main_on_sram.ld" 
+--map --datacompressor=off --info=inline --entry Reset_Handler 
+--autoat --summary_stderr --info summarysizes --map 
+--info sizes --info totals 
+--list ".\lst\MainOnSRAM.map" -o ".\obj\MainOnSRAM.axf"
+```
+
+#### Full on SRAM
+
 Same as the **main() on SRAM** memory model, the **Full on SRAM** memory model moves all code/data to SRAM with another approach.
 
 ![](Docs/nuc505_memory_model_3.png)
+
+Memory Initialization:
+
+```
+/****************************************************************************************************/
+/* VECMAP function is used to map the specified start address to memory address 0x0000-0000.        */
+/* This initialize file maps the SRAM (0x2000-0000) to address 0x0000_0000 through VECMAP function. */
+/****************************************************************************************************/
+FUNC void SRAMMap(void)
+{
+ _WDWORD(0x40000050, 0x20000000);                       /* Specify the load VECMAP address   (reg : SYS_LVMPADDR) */
+ _WDWORD(0x40000054, 0x00000080);                       /* Specify the VECMAP length : 128KB (reg : SYS_LVMPLEN)  */
+ _WDWORD(0x4000005C, 0x00000001);                       /* Load VECMAP address and length    (reg : SYS_RVMPLEN)  */
+}
+
+SRAMMap();
+LOAD %L INCREMENTAL
+RESET
+```
+
+Link Option:
+
+```
+--cpu Cortex-M4.fp ".\obj\system_nuc505series.o" ".\obj\startup_nuc505series.o" ".\obj\retarget.o" ".\obj\clk.o" ".\obj\sys.o" ".\obj\uart.o" ".\obj\main.o" 
+--library_type=microlib --ro-base 0x00000000 --entry 0x00000000 --rw-base 0x20000000 
+--entry Reset_Handler --first __Vectors --strict --map 
+--first='startup_nuc505series.o(RESET)' --datacompressor=off --info=inline --entry Reset_Handler 
+--autoat --summary_stderr --info summarysizes --map --xref --callgraph --symbols 
+--info sizes --info totals --info unused --info veneers 
+--list ".\lst\hello.map" -o ".\obj\hello.axf"
+```
+
+#### Overlay
 
 The **Overlay** memory model divides a large program into multiple pieces of code/data which are loaded into SRAM when required.
 
