@@ -88,21 +88,58 @@ With space and speed taken into consideration, user may apply memory models intr
 - Full on SRAM
 - Overlay.
 
+#### Typical
+
 The **Typical** memory model arranges read-only code/data on SPI Flash and the remaining on SRAM, with read/write data differently handled.
 
 ![](Docs/nuc505_memory_model_0.png)
+
+#### Critical on SRAM
 
 Based on the **Typical** memory model, the **Critical on SRAM** memory model moves critical code/data from SPI Flash to SRAM for better performance.
 
 ![](Docs/nuc505_memory_model_1.png)
 
+#### Main on SRAM
+
 The **main() on SRAM** memory model makes the idea further by moving all code/data to SRAM except unmovable part.
 
 ![](Docs/nuc505_memory_model_2.png)
 
+#### Full on SRAM
+
 Same as the **main() on SRAM** memory model, the **Full on SRAM** memory model moves all code/data to SRAM with another approach.
 
 ![](Docs/nuc505_memory_model_3.png)
+
+Memory Initialization:
+
+```
+/****************************************************************************************************/
+/* VECMAP function is used to map the specified start address to memory address 0x0000-0000.        */
+/* This initialize file maps the SRAM (0x2000-0000) to address 0x0000_0000 through VECMAP function. */
+/****************************************************************************************************/
+FUNC void SRAMMap(void)
+{
+ _WDWORD(0x40000050, 0x20000000);                       /* Specify the load VECMAP address   (reg : SYS_LVMPADDR) */
+ _WDWORD(0x40000054, 0x00000080);                       /* Specify the VECMAP length : 128KB (reg : SYS_LVMPLEN)  */
+ _WDWORD(0x4000005C, 0x00000001);                       /* Load VECMAP address and length    (reg : SYS_RVMPLEN)  */
+}
+
+SRAMMap();
+LOAD %L INCREMENTAL
+RESET
+```
+
+Link Option:
+
+```
+--cpu Cortex-M4.fp ".\obj\system_nuc505series.o" ".\obj\startup_nuc505series.o" ".\obj\retarget.o" ".\obj\clk.o" ".\obj\sys.o" ".\obj\uart.o" ".\obj\main.o" --library_type=microlib --ro-base 0x00000000 --entry 0x00000000 --rw-base 0x20000000 --entry Reset_Handler --first __Vectors --strict --map --first='startup_nuc505series.o(RESET)' --datacompressor=off --info=inline --entry Reset_Handler --autoat --summary_stderr --info summarysizes --map --xref --callgraph --symbols 
+--info sizes --info totals --info unused --info veneers 
+ --list ".\lst\hello.map" -o ".\obj\hello.axf"
+```
+
+#### Overlay
 
 The **Overlay** memory model divides a large program into multiple pieces of code/data which are loaded into SRAM when required.
 
