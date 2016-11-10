@@ -18,27 +18,34 @@
 
 #include "diskio.h"
 #include "ff.h"
+#include "Math.h"
 
 FIL    wavFileObject;
+FIL    wavFileObject1;
 size_t ReturnSize;
 
 uint32_t aPCMBuffer[2][PCM_BUFFER_SIZE];
+uint32_t aPCMBuffer1[2][PCM_BUFFER_SIZE];
 //12288=(PCM_BUFFER_SIZE*4)-(PCM_BUFFER_SIZE*4/4)
 uint8_t aPCMBuffer2[12288];
 volatile uint8_t aPCMBuffer_Full[2]= {0,0};
 uint32_t aWavHeader[11];
 
+extern  uint8_t musicNameFlag;
+
 uint8_t bAudioPlaying = 0;
 
-void WAVPlayer(void)
-{
-    FRESULT res;
-    uint8_t u8PCMBufferTargetIdx = 0;
-    uint32_t u32WavSamplingRate, u32WavChannel, u32WavBit;
-		uint32_t i;
+FRESULT res;
+uint8_t u8PCMBufferTargetIdx = 0;
+uint32_t u32WavSamplingRate, u32WavChannel, u32WavBit;
 
-    res = f_open(&wavFileObject, "0:\\test.wav", FA_OPEN_EXISTING | FA_READ);
-    if (res != FR_OK) {
+void WAVPlayer(const char * fileName)
+{
+		uint32_t i;
+	
+    res = f_open(&wavFileObject, fileName, FA_OPEN_EXISTING | FA_READ);
+    if (res != FR_OK) 
+		{
         printf("Open file error!\n");
         return;
     }
@@ -56,13 +63,15 @@ void WAVPlayer(void)
         f_read(&wavFileObject, &ckID, 4, &ReturnSize);      // "RIFF" Chunk ID.
         f_read(&wavFileObject, &ckSize, 4, &ReturnSize);    // Chunk size.
         f_read(&wavFileObject, &wavSig, 4, &ReturnSize);    // "WAVE" signature.
-        if (ckID != 0x46464952 ||   // "RIFF"
-            wavSig != 0x45564157) {  // "WAVE"
+        if (ckID != 0x46464952 || wavSig != 0x45564157)   // "RIFF"// "WAVE"
+  			{  
             printf("Incorrect wave format!\n");
             return;
         }
-        while (1) {
-            if(f_eof(&wavFileObject)) {
+        while (1) 
+				{
+            if(f_eof(&wavFileObject)) 
+						{
                 printf("End of file reached!\n");
                 return;
             }
@@ -71,7 +80,8 @@ void WAVPlayer(void)
             ckSize = (uint32_t) -1;
             f_read(&wavFileObject, &ckID, 4, &ReturnSize);      // Chunk ID.
             f_read(&wavFileObject, &ckSize, 4, &ReturnSize);    // Chunk size.
-            if (ckID == 0x20746d66) {   // "fmt "
+            if (ckID == 0x20746d66) 
+						{   // "fmt "
                 uint16_t fmtTag, numChan;
                 uint32_t sampleRate, byteRate;
                 uint16_t blockAlign, sampleSize;
@@ -93,16 +103,19 @@ void WAVPlayer(void)
                 
                 f_lseek(&wavFileObject, wavHdrPos + ckSize);    // Seek to next chunk.
             }
-            else if (ckID == 0x61746164) {  // "data"
-                wavDatPos = f_tell(&wavFileObject);
+            else if (ckID == 0x61746164) 
+						{  // "data"
+                wavDatPos = f_tell(&wavFileObject);	
                 
                 f_lseek(&wavFileObject, wavDatPos + ckSize);    // Seek to next chunk.
             }
-            else {
+            else 
+						{
                 f_lseek(&wavFileObject, f_tell(&wavFileObject) + ckSize);    // Seek to next chunk.
             }
             
-            if (wavHdrPos != (uint32_t) -1 && wavDatPos != (uint32_t) -1) {
+            if (wavHdrPos != (uint32_t) -1 && wavDatPos != (uint32_t) -1) 
+						{
                 f_lseek(&wavFileObject, wavDatPos);    // Seek to wave data.
                 break;
             }
@@ -118,27 +131,30 @@ void WAVPlayer(void)
 			// I2S = 45158425Hz / (0+1) = 45158425Hz for 11025k, 22050k, and 44100k sampling rate
 		}
 		
-        /* Check if sampling rate is supported. */
-        do {
-            uint32_t SRSupArr[] = { // Sampling rate support list
-                8000, 16000, 32000,
-                12000, 24000, 48000, 96000,
-							  11025, 22050, 44100,
-            };
-            uint32_t *SRSupInd;
-            uint32_t *SRSupEnd = SRSupArr + sizeof (SRSupArr) / sizeof (SRSupArr[0]);
-            
-            for (SRSupInd = SRSupArr; SRSupInd != SRSupEnd; SRSupInd ++) {
-                if (u32WavSamplingRate == *SRSupInd) {
-                    break;
-                }
-            }
-            if (SRSupInd == SRSupEnd) {
-                printf("%d sampling rate not support!\n", u32WavSamplingRate);
-                return;
-            }
-        }
-        while (0);
+		/* Check if sampling rate is supported. */
+		do {
+				uint32_t SRSupArr[] = { // Sampling rate support list
+						8000, 16000, 32000,
+						12000, 24000, 48000, 96000,
+						11025, 22050, 44100,
+				};
+				uint32_t *SRSupInd;
+				uint32_t *SRSupEnd = SRSupArr + sizeof (SRSupArr) / sizeof (SRSupArr[0]);
+				
+				for (SRSupInd = SRSupArr; SRSupInd != SRSupEnd; SRSupInd ++) 
+				{
+						if (u32WavSamplingRate == *SRSupInd) 
+						{
+								break;
+						}
+				}
+				if (SRSupInd == SRSupEnd) 
+				{
+						printf("%d sampling rate not support!\n", u32WavSamplingRate);
+						return;
+				}
+		}
+		while (0);
         
 		printf("wav: sampling rate=%d, channel(s)=%d, bits=%d\n", u32WavSamplingRate, u32WavChannel, u32WavBit);
 		
@@ -162,65 +178,19 @@ void WAVPlayer(void)
 		{
 			printf("channel(s) not support!\n");
 			return;
-		}
+		}	
+}
 
-		I2S_Open(I2S, I2S_MODE_MASTER, u32WavSamplingRate, u32WavBit, u32WavChannel, I2S_FORMAT_I2S, I2S_ENABLE_INTERNAL_CODEC);
-		I2S_EnableMCLK(I2S, u32WavSamplingRate*256);
-		InternalCODEC_Setup();
-
-    while(1) {
-        if((aPCMBuffer_Full[0] == 1) && (aPCMBuffer_Full[1] == 1 )) {       //all buffers are full, wait
-            if(!bAudioPlaying) {
-                bAudioPlaying = 1;
-								I2S_SET_TX_TH_LEVEL(I2S, I2S_FIFO_TX_LEVEL_WORD_15);
-								I2S_SET_RX_TH_LEVEL(I2S, I2S_FIFO_RX_LEVEL_WORD_16);
-								I2S_SET_TXDMA_STADDR(I2S, (uint32_t) &aPCMBuffer[0][0]);													// Tx Start Address
-								I2S_SET_TXDMA_THADDR(I2S, (uint32_t) &aPCMBuffer[0][PCM_BUFFER_SIZE-1]);			// Tx Threshold Address
-								I2S_SET_TXDMA_EADDR(I2S, (uint32_t) &aPCMBuffer[1][PCM_BUFFER_SIZE-1]);			// Tx End Address
-                I2S_ENABLE_TXDMA(I2S);
-                I2S_ENABLE_TX(I2S);
-								I2S_EnableInt(I2S, (I2S_IEN_TDMATIEN_Msk|I2S_IEN_TDMAEIEN_Msk));
-								NVIC_EnableIRQ(I2S_IRQn);
-                printf("Start Playing ...\n");
-            }
-
-//            while((aPCMBuffer_Full[0] == 1) && (aPCMBuffer_Full[1] == 1));
-							if(aPCMBuffer_Full[0] == 1)
-								while(aPCMBuffer_Full[0]);
-//            printf(".");
-        }
-
-				if ( u32WavBit == I2S_DATABIT_24 )
-				{
-					//12288=(PCM_BUFFER_SIZE*4)-(PCM_BUFFER_SIZE*4/4)
-					res = f_read(&wavFileObject, &aPCMBuffer2[0], 12288, &ReturnSize);
-					if(f_eof(&wavFileObject))   break;
-					// 4096=PCM_BUFFER_SIZE/4
-					for ( i = 0; i < 4096; i++ )
-						aPCMBuffer[u8PCMBufferTargetIdx][i] = (0 << 24) | (aPCMBuffer2[3*i+2] << 16) | (aPCMBuffer2[3*i+1] << 8) | aPCMBuffer2[3*i];
-				}
-				else
-				{
-					res = f_read(&wavFileObject, &aPCMBuffer[u8PCMBufferTargetIdx][0], PCM_BUFFER_SIZE*4, &ReturnSize);
-					if(f_eof(&wavFileObject))   break;
-				}
-				
-				NVIC_DisableIRQ(I2S_IRQn);
-        aPCMBuffer_Full[u8PCMBufferTargetIdx] = 1;
-				NVIC_EnableIRQ(I2S_IRQn);
-
-        if(bAudioPlaying) {
-            if(aPCMBuffer_Full[u8PCMBufferTargetIdx^1] == 1)
-                while(aPCMBuffer_Full[u8PCMBufferTargetIdx^1]);
-        }
-
-        u8PCMBufferTargetIdx ^= 1;
-
-//      printf("change to ==>%d\n", u8PCMBufferTargetIdx);
-    }
-
-    I2S_DISABLE_TX(I2S);
-    I2S_DISABLE_TXDMA(I2S);
-    f_close(&wavFileObject);
+void WAVPlay_Stop(void)
+{
+	bAudioPlaying=0;
+	musicNameFlag=0;
+	I2S_DISABLE_TX(I2S);
+	I2S_DISABLE_TXDMA(I2S);
+	f_close(&wavFileObject);
+	memset(aPCMBuffer[0],0,PCM_BUFFER_SIZE);
+	memset(aPCMBuffer[1],0,PCM_BUFFER_SIZE);
+	aPCMBuffer_Full[0]=0;
+	aPCMBuffer_Full[1]=0;
 }
 

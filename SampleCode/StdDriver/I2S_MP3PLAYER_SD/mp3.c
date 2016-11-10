@@ -73,8 +73,8 @@ struct AudioInfoObject audioInfo;
 int32_t MP3_ParseHeaderInfo(uint8_t *pFileName)
 {
     FRESULT res;
-	uint32_t i=0;
-	int32_t i32Offset;
+	  uint32_t i=0;
+	  int32_t i32Offset;
 
     res = f_open(&mp3FileObject, (void *)pFileName, FA_OPEN_EXISTING | FA_READ);
     if (res == FR_OK) {
@@ -173,7 +173,7 @@ void StopPlay(void)
 }
 
 // MP3 decode player
-void MP3Player(void)
+void MP3Player(char * fileName)
 {
     FRESULT res;
     uint8_t *ReadStart;
@@ -190,14 +190,14 @@ void MP3Player(void)
     memset((void *)&audioInfo, 0, sizeof(audioInfo));
 
     /* Parse MP3 header */
-    i32Offset = MP3_ParseHeaderInfo(MP3_FILE);
+    i32Offset = MP3_ParseHeaderInfo(fileName);
 
 	if ( i32Offset < 0 )
 		return;
 	else
 	{
 		/* Open MP3 file */
-		res = f_open(&mp3FileObject, MP3_FILE, FA_OPEN_EXISTING | FA_READ);
+		res = f_open(&mp3FileObject, fileName, FA_OPEN_EXISTING | FA_READ);
 ///	f_open(&file2, MP3_FILE2, FA_CREATE_ALWAYS | FA_WRITE);
 		if (res != FR_OK) {
 			printf("Open file error \r\n");
@@ -227,8 +227,10 @@ void MP3Player(void)
     mad_frame_init(&Frame);
     mad_synth_init(&Synth);
 
-    while(1) {
-        if(Stream.buffer==NULL || Stream.error==MAD_ERROR_BUFLEN) {
+    while(1) 
+		{
+        if(Stream.buffer==NULL || Stream.error==MAD_ERROR_BUFLEN) 
+				{
             if(Stream.next_frame != NULL) {
                 /* Get the remaining frame */
                 Remaining = Stream.bufend - Stream.next_frame;
