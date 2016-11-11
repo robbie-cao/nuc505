@@ -460,6 +460,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\Library\StdDriver\src\sd.c</FilePath>
             </File>
+            <File>
+              <FileName>timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\Library\StdDriver\src\timer.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
