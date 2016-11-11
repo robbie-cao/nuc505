@@ -15,9 +15,6 @@
 #include "config.h"
 #include "diskio.h"
 #include "ff.h"
-#include "numNotation.h"
-#include "key.h"
-#include "stdlib.h"
 
 FATFS FatFs[_VOLUMES];      /* File system object for logical drive */
 
@@ -29,122 +26,6 @@ BYTE Buff[1024] ;       /* Working buffer */
 #ifdef __ARMCC_VERSION
 __align(32) BYTE Buff[1024] ;       /* Working buffer */
 #endif
-
-
-#define RXBUFSIZE   1024
-#define KEY_OFFSET_PER_DEGREE       12
-#define KEY_PIANO_BEGIN   21
-#define AUDIO_KEYNOTE_PIANO_BEGIN 21
-#define KEYNOTE_BEGIN           AUDIO_KEYNOTE_PIANO_BEGIN
-#define KEYNOTE_BY_KEY(k)       (KEYNOTE_BEGIN + ((k) - KEY_PIANO_BEGIN))
-#define FAKE_PLAY_OFFSET 0
-
-extern FIL wavFileObject;
-extern  uint8_t bAudioPlaying;
-extern FRESULT res;
-extern uint8_t u8PCMBufferTargetIdx;
-extern uint32_t u32WavSamplingRate, u32WavChannel, u32WavBit;
-extern FIL    wavFileObject;
-extern size_t ReturnSize;
-
-extern uint32_t aPCMBuffer[2][PCM_BUFFER_SIZE];
-extern uint8_t aPCMBuffer2[12288];
-extern volatile uint8_t aPCMBuffer_Full[2];
-
-uint8_t musicNameFlag = 0;
-/*---------------------------------------------------------------------------------------------------------*/
-/* Global variables                                                                                        */
-/*---------------------------------------------------------------------------------------------------------*/
-uint8_t g_u8RecData[RXBUFSIZE]  = {0};
-uint8_t time;
-
-volatile uint32_t g_u32comRbytes = 0;
-volatile uint32_t g_u32comRhead  = 0;
-volatile uint32_t g_u32comRtail  = 0;
-volatile int32_t g_bWait         = TRUE;
-
-// Music_0 Little Star
-static const NoteSimplified_t sNoteSimplified_0[] =
-{
-  {1,0,1,0}, {1,0,1,0}, {5,0,1,0}, {5,0,1,0},
-  {6,0,1,0}, {6,0,1,0}, {5,0,0,0}, {4,0,1,0},
-  {4,0,1,0}, {3,0,1,0},
-  {3,0,1,0}, {2,0,1,0}, {2,0,1,0}, {1,0,0,0},
-  {5,0,1,0}, {5,0,1,0}, {4,0,1,0}, {4,0,1,0},
-  {3,0,1,0}, {3,0,1,0}, {2,0,0,0},
-  {5,0,1,0}, {5,0,1,0}, {4,0,1,0}, {4,0,1,0},
-  {3,0,1,0}, {3,0,1,0}, {2,0,0,0}, {1,0,1,0},
-  {1,0,1,0}, {5,0,1,0}, {5,0,1,0},
-  {6,0,1,0}, {6,0,1,0}, {5,0,0,0}, {4,0,1,0},
-  {4,0,1,0}, {3,0,1,0}, {3,0,1,0}, {2,0,1,0},
-  {2,0,1,0}, {1,0,0,0},
-};
-
-// Music_1 Two Tigers
-static const NoteSimplified_t sNoteSimplified_1[] =
-{
-  {1,0,1,0}, {2,0,1,0}, {3,0,1,0}, {1,0,1,0},
-  {1,0,1,0}, {2,0,1,0}, {3,0,1,0}, {1,0,1,0},
-  {3,0,1,0}, {4,0,1,0}, {5,0,0,0},
-  {3,0,1,0}, {4,0,1,0}, {5,0,0,0},
-  {5,0,2,0}, {6,0,2,0}, {5,0,2,0}, {4,0,2,0},
-  {3,0,1,0}, {1,0,1,0},
-  {5,0,2,0}, {6,0,2,0}, {5,0,2,0}, {4,0,2,0},
-  {3,0,1,0}, {1,0,1,0},
-  {2,0,1,0}, {5,0,1,1}, {1,0,1,0},
-  {2,0,1,0}, {5,0,1,1}, {1,0,1,0},
-};
-
-// Music_2 Happy Birthday
-static const NoteSimplified_t sNoteSimplified_2[] =
-{
-  {5,0,2,1}, {5,0,2,1}, {6,0,1,1}, {5,0,1,1}, {1,0,1,0}, {7,0,0,1},
-  {5,0,2,1}, {5,0,2,1}, {6,0,1,1}, {5,0,1,1}, {2,0,1,0}, {1,0,1,0},
-  {5,0,2,1}, {5,0,2,1}, {5,0,1,0}, {3,0,1,0}, {1,0,1,0}, {7,0,1,1}, {6,0,1,1},
-  {4,0,2,0}, {4,0,2,0}, {3,0,1,0}, {1,0,1,0}, {2,0,1,0}, {1,0,1,0},
-};
-
-
-static const ScoreSimplified_t sScoreSimplified[] =
-{
-  // Two Tigers
-  { {0,0,0},    //Clef
-    {0,0},      //Key Signature
-    {4,4},      //Time Signature
-    sizeof(sNoteSimplified_0),
-    sNoteSimplified_0
-  },
-  // Happy Birthday
-  { {0,0,0},    //Clef
-    {0,0},      //Key Signature
-    {3,4},      //Time Signature
-    sizeof(sNoteSimplified_1),
-    sNoteSimplified_1
-  },
-  // Yankee Doodle
-  { {0,0,0},    //Clef
-    {0,0},      //Key Signature
-    {4,4},      //Time Signature
-    sizeof(sNoteSimplified_2),
-    sNoteSimplified_2
-  },
-};
-
-uint8 NumNotaiton_NoteSimpToKeyNote(NoteSimplified_t note)
-{
-  //calculate the note from simplified note
-  const uint8 offset[] = { 0, 2, 4, 5, 7, 9, 11 };
-  uint8 octOffset = (note.octaves & 0x2) ? (4 - note.octaves) : (- note.octaves);
-
-  if (note.note == 0) {
-    return 0;
-  }
-
-  return KEY_PIANO_60 + offset[note.note - 1] + note.sharp + octOffset * KEY_OFFSET_PER_DEGREE;
-}
-
-
-#define SIZEOF_SCORESIMPLIFIED() (sizeof(sScoreSimplified) / sizeof(sScoreSimplified[0]))
 
 /*---------------------------------------------------------*/
 /* User Provided RTC Function for FatFs module             */
@@ -166,21 +47,6 @@ unsigned long get_fattime (void)
 void SysTick_Handler(void)
 {
 		
-}
-
-void TMR0_IRQHandler(void)
-{
-    static uint32_t sec = 1;
-    printf("%d sec\n", sec++);
-	
-		musicNameFlag=1;
-
-    // clear timer interrupt flag
-    TIMER_ClearIntFlag(TIMER0);
-
-    /* To avoid the synchronization issue between system and APB clock domain */
-    TIMER_GetIntFlag(TIMER0);
-
 }
 
 /*---------------------------------------------------------------------------------------------------------*/
@@ -279,13 +145,6 @@ void SYS_Init(void)
     
 		/* PCLK divider */
 		CLK_SetModuleClock(PCLK_MODULE, NULL, 1);
-	
-	/* Update System Core Clock */
-    SystemCoreClockUpdate();
-	
-		CLK_EnableModuleClock(TMR0_MODULE);
-	
-		CLK_SetModuleClock(TMR0_MODULE, CLK_TMR0_SRC_EXT, 0);
 		
     /* Lock protected registers */
     //SYS_LockReg();
@@ -300,7 +159,6 @@ void UART0_Init(void)
     CLK_EnableModuleClock(UART0_MODULE);
 		/* UART0 module clock from EXT */
 		CLK_SetModuleClock(UART0_MODULE, CLK_UART0_SRC_EXT, 0);
-	
     /* Reset IP */
     SYS_ResetModule(UART0_RST);    
     /* Configure UART0 and set UART0 Baud-rate */
@@ -311,22 +169,7 @@ void UART0_Init(void)
     /* Configure multi-function pins for UART0 RXD and TXD */
 		SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB0MFP_Msk) ) | SYS_GPB_MFPL_PB0MFP_UART0_TXD;	
 		SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB1MFP_Msk) ) | SYS_GPB_MFPL_PB1MFP_UART0_RXD;	
-}
-
-void UART1_Init(void)
-{
-	/* Enable UART0 Module clock */
-	CLK_EnableModuleClock(UART1_MODULE);
-	/* UART0 module clock from EXT */
-	CLK_SetModuleClock(UART1_MODULE, CLK_UART1_SRC_EXT, 0);
 	
-	SYS_ResetModule(UART1_RST);
-
-	/* Configure UART0 and set UART1 baud rate */
-	UART_Open(UART1, 115200);
-	
-	SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB6MFP_Msk) ) | SYS_GPB_MFPL_PB6MFP_UART1_TXD;
-  SYS->GPB_MFPL  = (SYS->GPB_MFPL & (~SYS_GPB_MFPL_PB7MFP_Msk) ) | SYS_GPB_MFPL_PB7MFP_UART1_RXD;	
 }
 
 void I2S_Init(void)
@@ -362,16 +205,11 @@ void I2S_Init(void)
 /*---------------------------------------------------------------------------------------------------------*/
 int32_t main (void)
 {
-		uint32_t i,j=0;
     /* Init System, IP clock and multi-function I/O */
     SYS_Init();
 
     /* Init UART0 to 115200-8n1 for print message */
     UART0_Init();
-		UART1_Init();
-	
-	  NVIC_SetPriority(I2S_IRQn,1);
-		NVIC_SetPriority(UART1_IRQn,1);
 
     printf("+------------------------------------------------------------------------+\n");
     printf("|                   I2S Driver Sample Code with internal CODEC           |\n");
@@ -387,107 +225,10 @@ int32_t main (void)
 
     /* Init I2S, IP clock and multi-function I/O */
 		I2S_Init();
-		
-		// Set timer frequency to 1HZ
-    TIMER_Open(TIMER0, TIMER_PERIODIC_MODE, 4);
 
-    // Enable timer interrupt
-    TIMER_EnableInt(TIMER0);
-    NVIC_EnableIRQ(TMR0_IRQn);
+    WAVPlayer();
 
-
-    // Start Timer 0
-    TIMER_Start(TIMER0);
-		
-		WAVPlayer("0:\\60.wav");
-		
-		I2S_Open(I2S, I2S_MODE_MASTER, u32WavSamplingRate, u32WavBit, u32WavChannel, I2S_FORMAT_I2S, I2S_ENABLE_INTERNAL_CODEC);
-		I2S_EnableMCLK(I2S, u32WavSamplingRate*256);		
-		InternalCODEC_Setup();		
-		
-		while(1){
-		
-		for (i = 0; i < 42; i++)
-		{
-//			WAVPlay_Stop();
-			
-			switch(KEYNOTE_BY_KEY(NumNotaiton_NoteSimpToKeyNote(sScoreSimplified[0].notes[i])))
-			{
-				case   60:WAVPlayer("0:\\60.wav");break;
-				case   61:WAVPlayer("0:\\61.wav");break;
-				case   62:WAVPlayer("0:\\62.wav");break;
-				case   63:WAVPlayer("0:\\63.wav");break;
-				case   64:WAVPlayer("0:\\64.wav");break;
-				case   65:WAVPlayer("0:\\65.wav");break;
-				case   66:WAVPlayer("0:\\66.wav");break;
-				case   67:WAVPlayer("0:\\67.wav");break;
-				case   68:WAVPlayer("0:\\68.wav");break;
-				case   69:WAVPlayer("0:\\69.wav");break;
-				default:
-					break;
-				
-			}
-			while(1)
-			{
-				if(musicNameFlag==1)
-				{
-					musicNameFlag=0;
-					break;
-				}
-				if((aPCMBuffer_Full[0] == 1) && (aPCMBuffer_Full[1] == 1 )) 
-				{   //all buffers are full, wait
-						if(!bAudioPlaying) 
-						{
-								bAudioPlaying = 1;
-								I2S_SET_TX_TH_LEVEL(I2S, I2S_FIFO_TX_LEVEL_WORD_15);
-								I2S_SET_RX_TH_LEVEL(I2S, I2S_FIFO_RX_LEVEL_WORD_16);
-								I2S_SET_TXDMA_STADDR(I2S, (uint32_t) &aPCMBuffer[0][0]);													// Tx Start Address
-								I2S_SET_TXDMA_THADDR(I2S, (uint32_t) &aPCMBuffer[0][PCM_BUFFER_SIZE-1]);			// Tx Threshold Address
-								I2S_SET_TXDMA_EADDR(I2S, (uint32_t) &aPCMBuffer[1][PCM_BUFFER_SIZE-1]);			// Tx End Address
-								I2S_ENABLE_TXDMA(I2S);
-								I2S_ENABLE_TX(I2S);
-								I2S_EnableInt(I2S, (I2S_IEN_TDMATIEN_Msk|I2S_IEN_TDMAEIEN_Msk));
-								NVIC_EnableIRQ(I2S_IRQn);
-								printf("Start Playing ...\n");
-						}
-							
-						if(aPCMBuffer_Full[0] == 1)
-								while(aPCMBuffer_Full[0]);
-					}
-
-					if ( u32WavBit == I2S_DATABIT_24 )
-					{
-						//12288=(PCM_BUFFER_SIZE*4)-(PCM_BUFFER_SIZE*4/4)
-						res = f_read(&wavFileObject, &aPCMBuffer2[0], 12288, &ReturnSize);
-						if(f_eof(&wavFileObject)) 
-							break;
-						// 4096=PCM_BUFFER_SIZE/4
-						for ( i = 0; i < 4096; i++ )
-							aPCMBuffer[u8PCMBufferTargetIdx][i] = (0 << 24) | (aPCMBuffer2[3*i+2] << 16) | (aPCMBuffer2[3*i+1] << 8) | aPCMBuffer2[3*i];
-					}
-					else
-					{
-						res = f_read(&wavFileObject, &aPCMBuffer[u8PCMBufferTargetIdx][0], PCM_BUFFER_SIZE*4, &ReturnSize);
-						if(f_eof(&wavFileObject))   
-							break;
-					}
-					
-					NVIC_DisableIRQ(I2S_IRQn);
-					aPCMBuffer_Full[u8PCMBufferTargetIdx] = 1;
-					NVIC_EnableIRQ(I2S_IRQn);
-
-					if(bAudioPlaying) 
-					{
-							if(aPCMBuffer_Full[u8PCMBufferTargetIdx^1] == 1)
-									while(aPCMBuffer_Full[u8PCMBufferTargetIdx^1]);
-					}
-
-					u8PCMBufferTargetIdx ^= 1;
-			}
-			
-		}
-	}
-    
+    while(1);
 }
 
 /*** (C) COPYRIGHT 2015 Nuvoton Technology Corp. ***/

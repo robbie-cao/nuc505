@@ -12,18 +12,14 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#include "ff.h"
-
 /*---------------------------------------------------------------------------------------------------------*/
 /* Global variables                                                                                        */
 /*---------------------------------------------------------------------------------------------------------*/
 
-#define PCM_BUFFER_SIZE 1024
+#define PCM_BUFFER_SIZE 4*1024
 
-void WAVPlayer(const char * fileName);
+void WAVPlayer(void);
 void InternalCODEC_Setup(void);
-void WAVMixPlayer(const char * fileName1,const char * fileName2);
-void WAVPlay_Stop(void);
 
 #endif
 

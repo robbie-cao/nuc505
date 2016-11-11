@@ -47,7 +47,7 @@ struct AudioInfoObject {
 
 int mp3CountV1L3Headers(unsigned char *pBytes, size_t size);
 void InternalCODEC_Setup(void);
-void MP3Player(char * fileName);
+void MP3Player(void);
 #endif
 
 /*** (C) COPYRIGHT 2014 Nuvoton Technology Corp. ***/

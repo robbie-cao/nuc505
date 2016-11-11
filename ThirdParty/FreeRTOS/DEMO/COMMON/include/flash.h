@@ -76,7 +76,6 @@
 #define FLASH_LED_H
 
 void vStartLEDFlashTasks( unsigned portBASE_TYPE uxPriority );
-void vStartMP3Tasks( unsigned portBASE_TYPE uxPriority );
 
 #endif
 
